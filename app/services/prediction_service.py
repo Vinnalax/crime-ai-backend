@@ -6,7 +6,12 @@ def predict_crime(data):
 
     try:
 
-        result = model_predict(data)
+        result = model_predict(
+            data.latitude,
+            data.longitude,
+            data.hour,
+            data.month
+        )
 
         return {
             "status": "success",

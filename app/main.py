@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes.predict import router as predict_router
+from app.routes.system import router as system_router
 
 app = FastAPI(
     title="Crime Prediction API",
@@ -8,7 +9,10 @@ app = FastAPI(
     version="0.5"
 )
 
-# CORS
+# =========================
+# CORS CONFIGURATION
+# =========================
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -19,6 +23,7 @@ app.add_middleware(
 
 # Routes
 app.include_router(predict_router)
+app.include_router(system_router)
 
 # Root route
 @app.get("/")

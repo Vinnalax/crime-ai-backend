@@ -1,15 +1,50 @@
+# =========================
+# Virtual Environment
+# =========================
+
 venv/
+
+# =========================
+# Python Cache
+# =========================
+
 __pycache__/
 *.pyc
-.env
-.ipynb_checkpoints/
-.cache/
-# Large datasets
-data/raw/
-data/processed/
 
-# Large ML models
+# =========================
+# Models
+# =========================
+
 models/*.pkl
 
-# Optional parquet ignores
-*.parquet
+# =========================
+# Datasets
+# =========================
+
+data/raw/*.csv
+data/processed/*.csv
+
+# =========================
+# Environment Files
+# =========================
+
+.env
+
+# =========================
+# Logs
+# =========================
+
+logs/
+
+# =========================
+# ZIP Files
+# =========================
+
+*.zip
+
+# =========================
+# OS Junk
+# =========================
+
+.DS_Store
+data/

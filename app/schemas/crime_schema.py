@@ -1,23 +1,51 @@
-from pydantic import BaseModel
-from typing import Optional
+from pydantic import BaseModel, Field
 
+
+# =========================
+# INPUT SCHEMA
+# =========================
 
 class CrimeInput(BaseModel):
 
-    Latitude: Optional[float] = None
-    Longitude: Optional[float] = None
+    latitude: float = Field(
+        ...,
+        ge=-90,
+        le=90,
+        description="Latitude coordinate"
+    )
 
-    day: Optional[int] = None
-    month: Optional[int] = None
-    year: Optional[int] = None
+    longitude: float = Field(
+        ...,
+        ge=-180,
+        le=180,
+        description="Longitude coordinate"
+    )
 
-    weekday: Optional[int] = None
-    is_weekend: Optional[int] = None
+    hour: int | None = Field(
+        default=None,
+        ge=0,
+        le=23,
+        description="Hour of incident"
+    )
 
+    month: int | None = Field(
+        default=None,
+        ge=1,
+        le=12,
+        description="Month number"
+    )
+
+
+# =========================
+# RESPONSE SCHEMA
+# =========================
 
 class PredictionResponse(BaseModel):
 
     status: str
+
     predicted_crime: str
+
     confidence: float
+
     timestamp: str
