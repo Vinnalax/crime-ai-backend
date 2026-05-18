@@ -2,6 +2,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes.predict import router as predict_router
 from app.routes.system import router as system_router
+from app.routes.heatmap import router as heatmap_router
+from app.routes.hotspots import router as hotspot_router
+from app.routes.analytics import router as analytics_router
+from app.routes.report_crime import router as report_router
 
 app = FastAPI(
     title="Crime Prediction API",
@@ -24,6 +28,10 @@ app.add_middleware(
 # Routes
 app.include_router(predict_router)
 app.include_router(system_router)
+app.include_router(heatmap_router)
+app.include_router(hotspot_router)
+app.include_router(analytics_router)
+app.include_router(report_router)
 
 # Root route
 @app.get("/")
