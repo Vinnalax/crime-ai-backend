@@ -1,0 +1,93 @@
+.
+├── app
+│   ├── core
+│   │   ├── config.py
+│   │   └── logging_config.py
+│   ├── gis
+│   │   ├── analytics_engine.py
+│   │   ├── heatmap_engine.py
+│   │   └── hotspot_engine.py
+│   ├── main.py
+│   ├── model_loader.py
+│   ├── preprocessing
+│   │   └── feature_pipeline.py
+│   ├── routes
+│   │   ├── analytics.py
+│   │   ├── health.py
+│   │   ├── heatmap.py
+│   │   ├── hotspots.py
+│   │   ├── predict.py
+│   │   ├── prediction.py
+│   │   ├── report_crime.py
+│   │   └── system.py
+│   ├── schemas
+│   │   ├── crime_report.py
+│   │   └── crime_schema.py
+│   ├── services
+│   │   └── prediction_service.py
+│   └── utils
+│       └── logger.py
+├── architecture-tree.txt
+├── bengaluru-ai-crime-platform.zip
+├── data
+│   ├── processed
+│   │   ├── bengaluru.parquet
+│   │   ├── crime.parquet
+│   │   └── invalid_coordinates.parquet
+│   └── raw
+│       └── karnataka_fir.csv
+├── frontend
+│   ├── README.md
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── postcss.config.cjs
+│   ├── public
+│   │   ├── favicon.svg
+│   │   └── icons.svg
+│   ├── src
+│   │   ├── App.css
+│   │   ├── App.jsx
+│   │   ├── assets
+│   │   │   ├── hero.png
+│   │   │   ├── react.svg
+│   │   │   └── vite.svg
+│   │   ├── components
+│   │   │   ├── CrimeMap.jsx
+│   │   │   ├── KpiCard.jsx
+│   │   │   ├── Navbar.jsx
+│   │   │   └── Sidebar.jsx
+│   │   ├── index.css
+│   │   ├── layout
+│   │   │   └── MainLayout.jsx
+│   │   ├── main.jsx
+│   │   ├── pages
+│   │   │   ├── AnalyticsPage.jsx
+│   │   │   ├── HeatmapPage.jsx
+│   │   │   ├── OverviewPage.jsx
+│   │   │   └── PredictionPage.jsx
+│   │   └── routes
+│   ├── tailwind.config.js
+│   └── vite.config.js
+├── logs
+│   └── backend.log
+├── models
+│   ├── crime_classifier.pkl
+│   └── label_encoder.pkl
+├── project-structure.txt
+├── requirements.txt
+├── scripts
+│   ├── inspect_dataset.py
+│   └── spatial_audit.py
+├── start.sh
+├── training
+│   ├── train_classifier.py
+│   ├── train_forecast_model.py
+│   └── train_hotspot_model.py
+└── utils
+    ├── feature_engineering.py
+    ├── filter_bengaluru.py
+    └── preprocess.py
+
+25 directories, 66 files

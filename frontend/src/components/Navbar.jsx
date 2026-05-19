@@ -32,13 +32,13 @@ function Navbar() {
       {/* RIGHT */}
       <div className="flex items-center gap-5 text-sm text-muted">
 
-        <button className="hover:text-white transition-all">
-          English
-        </button>
+       <button className="hover:text-white hover:scale-105 transition-all duration-300">
+        English
+      </button>
 
-        <button className="hover:text-white transition-all">
-          Dark
-        </button>
+      <button className="hover:text-white hover:scale-105 transition-all duration-300">
+        Dark
+      </button>
 
       </div>
     </nav>

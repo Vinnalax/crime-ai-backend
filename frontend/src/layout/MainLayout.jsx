@@ -25,7 +25,7 @@ function MainLayout({
             setActivePage={setActivePage}
           />
 
-          <main className="flex-1 p-6">
+          <main className="flex-1 p-8">
             {children}
           </main>
 

@@ -1,30 +1,52 @@
+import CrimeMap from "../components/CrimeMap"
+
 function HeatmapPage() {
   return (
     <div>
 
       {/* PAGE HEADER */}
-      <div className="mb-8">
+      <div className="relative mb-10">
 
-        <p className="text-accent uppercase tracking-[0.3em] text-sm">
-          Geospatial Intelligence
-        </p>
+        {/* AMBIENT GLOW */}
+        <div className="absolute top-[-80px] left-0 w-[350px] h-[350px] bg-red-500/10 blur-[120px] rounded-full pointer-events-none" />
 
-        <h1 className="text-5xl font-bold mt-4">
-          Bengaluru Crime Heatmap
-        </h1>
+        <div className="relative z-10">
 
-        <p className="text-muted text-lg mt-4 max-w-3xl">
-          Real-time spatial hotspot visualization and
-          urban crime density analytics powered by
-          AI-driven geospatial intelligence.
-        </p>
+          {/* BADGES */}
+          <div className="flex items-center gap-3 mb-4">
+
+            <div className="px-4 py-2 rounded-full bg-red-500/10 border border-red-400/20 text-red-300 text-xs tracking-[0.2em] uppercase shadow-glow">
+
+              Geospatial Intelligence
+
+            </div>
+
+            <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-muted text-xs">
+
+              Real-Time Crime Density
+
+            </div>
+
+          </div>
+
+          <h1 className="text-5xl font-bold mt-4 leading-tight">
+            Bengaluru Crime Heatmap
+          </h1>
+
+          <p className="text-muted text-lg mt-4 max-w-3xl">
+            Real-time spatial hotspot visualization and
+            urban crime density analytics powered by
+            AI-driven geospatial intelligence.
+          </p>
+
+        </div>
 
       </div>
 
       {/* FILTER BAR */}
-      <div className="bg-card/70 backdrop-blur-md border border-white/10 rounded-2xl p-4 flex flex-wrap gap-4 items-center mb-8">
+      <div className="bg-card/70 backdrop-blur-md border border-white/10 rounded-2xl p-4 flex flex-wrap gap-4 items-center mb-8 shadow-[0_0_40px_rgba(255,255,255,0.03)]">
 
-        <select className="bg-background border border-white/10 rounded-xl px-4 py-3 text-sm outline-none">
+        <select className="bg-background border border-white/10 rounded-xl px-4 py-3 text-sm outline-none hover:border-accent/30 transition-all">
 
           <option>All Crime Types</option>
           <option>Theft</option>
@@ -33,7 +55,7 @@ function HeatmapPage() {
 
         </select>
 
-        <select className="bg-background border border-white/10 rounded-xl px-4 py-3 text-sm outline-none">
+        <select className="bg-background border border-white/10 rounded-xl px-4 py-3 text-sm outline-none hover:border-accent/30 transition-all">
 
           <option>All Years</option>
           <option>2021</option>
@@ -42,7 +64,7 @@ function HeatmapPage() {
 
         </select>
 
-        <button className="bg-accent hover:bg-accent/90 transition-all px-5 py-3 rounded-xl text-sm font-medium shadow-glow">
+        <button className="bg-accent hover:bg-accent/90 hover:scale-105 transition-all duration-300 px-5 py-3 rounded-xl text-sm font-medium shadow-glow">
 
           Apply Filters
 
@@ -54,7 +76,7 @@ function HeatmapPage() {
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
 
         {/* MAP PANEL */}
-        <div className="xl:col-span-3 bg-card border border-white/10 rounded-3xl p-5">
+        <div className="xl:col-span-3 bg-card/80 backdrop-blur-md border border-white/10 rounded-3xl p-5 shadow-[0_0_40px_rgba(255,255,255,0.03)]">
 
           <div className="flex items-center justify-between mb-5">
 
@@ -82,18 +104,16 @@ function HeatmapPage() {
 
           </div>
 
-          {/* MAP PLACEHOLDER */}
-          <div className="h-[650px] rounded-3xl bg-background border border-white/5 flex items-center justify-center relative overflow-hidden">
+          {/* REAL MAP */}
+          <div className="h-[620px] rounded-3xl overflow-hidden border border-white/5 relative">
 
-            {/* GRID */}
-            <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] bg-[size:40px_40px]" />
+            {/* DARK OVERLAY */}
+            <div className="absolute inset-0 bg-black/0 z-[400] pointer-events-none" />
 
-            {/* GLOW */}
-            <div className="absolute w-[300px] h-[300px] bg-red-500/20 blur-[100px] rounded-full top-20 left-40" />
+            {/* MAP GLOW */}
+            <div className="absolute top-[-50px] right-[-50px] w-[250px] h-[250px] bg-blue-500/10 blur-[100px] rounded-full z-0 pointer-events-none" />
 
-            <p className="relative z-10 text-muted text-xl">
-              Bengaluru Heatmap Rendering Coming Next
-            </p>
+            <CrimeMap />
 
           </div>
 
@@ -103,7 +123,7 @@ function HeatmapPage() {
         <div className="space-y-6">
 
           {/* HOTSPOT PANEL */}
-          <div className="bg-card border border-white/10 rounded-3xl p-5">
+          <div className="bg-card/80 backdrop-blur-md border border-white/10 rounded-3xl p-5 shadow-[0_0_40px_rgba(255,255,255,0.03)]">
 
             <h2 className="text-2xl font-semibold">
               Hotspot Zones
@@ -121,7 +141,7 @@ function HeatmapPage() {
 
                 <div
                   key={zone}
-                  className="bg-background border border-white/5 rounded-2xl px-4 py-4"
+                  className="bg-background/80 backdrop-blur-md border border-white/5 rounded-2xl px-4 py-4 hover:border-red-400/20 hover:shadow-[0_0_20px_rgba(239,68,68,0.15)] transition-all duration-300"
                 >
 
                   <div className="flex items-center justify-between">
@@ -150,7 +170,7 @@ function HeatmapPage() {
           </div>
 
           {/* LEGEND */}
-          <div className="bg-card border border-white/10 rounded-3xl p-5">
+          <div className="bg-card/80 backdrop-blur-md border border-white/10 rounded-3xl p-5 shadow-[0_0_40px_rgba(255,255,255,0.03)]">
 
             <h2 className="text-2xl font-semibold">
               Risk Legend
