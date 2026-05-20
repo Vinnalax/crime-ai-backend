@@ -259,30 +259,33 @@ function ReportCrimePage() {
       <div className="relative z-10 grid grid-cols-1 xl:grid-cols-[1fr_420px] gap-8">
 
         {/* LEFT PANEL */}
-        <div className="rounded-[32px] border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 overflow-hidden relative">
+        <div className="relative overflow-hidden rounded-[36px] border border-slate-200/70 dark:border-white/[0.08] bg-white/85 dark:bg-card/70 backdrop-blur-2xl p-8 shadow-[0_20px_60px_rgba(15,23,42,0.08)] dark:shadow-none">
 
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.03] to-cyan-500/[0.01]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.04] via-cyan-500/[0.02] to-transparent dark:from-blue-500/[0.03] dark:to-cyan-500/[0.01]" />
 
           <div className="relative z-10">
 
             {/* HEADER */}
-            <div className="flex items-center gap-4 mb-10">
+            <div className="flex items-center gap-5 mb-10">
 
-              <div className="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-400/20 flex items-center justify-center">
+              <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-blue-500/15 to-cyan-400/10 border border-blue-400/20 flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.15)]">
 
-                <ShieldAlert className="text-blue-300" />
+                <ShieldAlert
+                  className="text-blue-500 dark:text-blue-300"
+                  size={28}
+                />
 
               </div>
 
               <div>
 
-                <h2 className="text-2xl font-semibold">
+                <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
 
                   Incident Query
 
                 </h2>
 
-                <p className="text-slate-400 text-sm mt-1">
+                <p className="text-slate-500 dark:text-slate-400 text-sm mt-2">
 
                   Spatial intelligence submission
 
@@ -292,10 +295,10 @@ function ReportCrimePage() {
 
             </div>
 
-            {/* CRIME INPUT */}
-            <div className="mb-7">
+            {/* CRIME */}
+            <div className="mb-8">
 
-              <label className="text-sm text-slate-400 mb-3 block">
+              <label className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-3 block">
 
                 Witnessed Crime
 
@@ -310,15 +313,29 @@ function ReportCrimePage() {
                     e.target.value
                   )
                 }
-                className="w-full bg-black/20 border border-white/[0.08] rounded-2xl px-5 py-4 outline-none focus:border-blue-400/30 transition-all text-white placeholder:text-slate-500"
+                className="
+                  w-full
+                  bg-white dark:bg-black/20
+                  border border-slate-200 dark:border-white/[0.08]
+                  rounded-2xl
+                  px-5 py-4
+                  outline-none
+                  shadow-inner
+                  focus:border-blue-400/40
+                  focus:ring-4
+                  focus:ring-blue-500/10
+                  transition-all
+                  text-slate-900 dark:text-white
+                  placeholder:text-slate-400
+                "
               />
 
             </div>
 
             {/* LOCATION */}
-            <div className="mb-7">
+            <div className="mb-8">
 
-              <label className="text-sm text-slate-400 mb-3 block">
+              <label className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-3 block">
 
                 Incident Location
 
@@ -326,7 +343,7 @@ function ReportCrimePage() {
 
               <div className="relative">
 
-                <MapPinned className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-300" />
+                <MapPinned className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-500 dark:text-blue-300" />
 
                 <input
                   type="text"
@@ -337,7 +354,21 @@ function ReportCrimePage() {
                       e.target.value
                     )
                   }
-                  className="w-full bg-black/20 border border-white/[0.08] rounded-2xl pl-12 pr-5 py-4 outline-none focus:border-blue-400/30 transition-all text-white placeholder:text-slate-500"
+                  className="
+                    w-full
+                    bg-white dark:bg-black/20
+                    border border-slate-200 dark:border-white/[0.08]
+                    rounded-2xl
+                    pl-12 pr-5 py-4
+                    outline-none
+                    shadow-inner
+                    focus:border-blue-400/40
+                    focus:ring-4
+                    focus:ring-blue-500/10
+                    transition-all
+                    text-slate-900 dark:text-white
+                    placeholder:text-slate-400
+                  "
                 />
 
               </div>
@@ -349,7 +380,7 @@ function ReportCrimePage() {
 
               <div>
 
-                <label className="text-sm text-slate-400 mb-3 block">
+                <label className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-3 block">
 
                   Hour of Day
 
@@ -357,7 +388,7 @@ function ReportCrimePage() {
 
                 <div className="relative">
 
-                  <Clock3 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-300" />
+                  <Clock3 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-500 dark:text-blue-300" />
 
                   <input
                     type="number"
@@ -370,7 +401,21 @@ function ReportCrimePage() {
                         e.target.value
                       )
                     }
-                    className="w-full bg-black/20 border border-white/[0.08] rounded-2xl pl-12 pr-5 py-4 outline-none focus:border-blue-400/30 transition-all text-white placeholder:text-slate-500"
+                    className="
+                      w-full
+                      bg-white dark:bg-black/20
+                      border border-slate-200 dark:border-white/[0.08]
+                      rounded-2xl
+                      pl-12 pr-5 py-4
+                      outline-none
+                      shadow-inner
+                      focus:border-blue-400/40
+                      focus:ring-4
+                      focus:ring-blue-500/10
+                      transition-all
+                      text-slate-900 dark:text-white
+                      placeholder:text-slate-400
+                    "
                   />
 
                 </div>
@@ -379,7 +424,7 @@ function ReportCrimePage() {
 
               <div>
 
-                <label className="text-sm text-slate-400 mb-3 block">
+                <label className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-3 block">
 
                   Month
 
@@ -387,7 +432,7 @@ function ReportCrimePage() {
 
                 <div className="relative">
 
-                  <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-300" />
+                  <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-500 dark:text-blue-300" />
 
                   <input
                     type="number"
@@ -400,7 +445,21 @@ function ReportCrimePage() {
                         e.target.value
                       )
                     }
-                    className="w-full bg-black/20 border border-white/[0.08] rounded-2xl pl-12 pr-5 py-4 outline-none focus:border-blue-400/30 transition-all text-white placeholder:text-slate-500"
+                    className="
+                      w-full
+                      bg-white dark:bg-black/20
+                      border border-slate-200 dark:border-white/[0.08]
+                      rounded-2xl
+                      pl-12 pr-5 py-4
+                      outline-none
+                      shadow-inner
+                      focus:border-blue-400/40
+                      focus:ring-4
+                      focus:ring-blue-500/10
+                      transition-all
+                      text-slate-900 dark:text-white
+                      placeholder:text-slate-400
+                    "
                   />
 
                 </div>
@@ -409,12 +468,24 @@ function ReportCrimePage() {
 
             </div>
 
-            {/* VERIFY BUTTON */}
+            {/* VERIFY */}
             <button
               onClick={
                 handleVerifyLocation
               }
-              className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-500 hover:opacity-90 transition-all duration-300 font-medium shadow-2xl shadow-blue-500/20 mb-4"
+              className="
+                w-full py-4 rounded-2xl
+                bg-gradient-to-r
+                from-blue-600
+                via-blue-500
+                to-cyan-500
+                hover:scale-[1.01]
+                transition-all duration-300
+                font-medium
+                shadow-[0_10px_40px_rgba(59,130,246,0.3)]
+                text-white
+                mb-4
+              "
             >
 
               {loading
@@ -423,142 +494,27 @@ function ReportCrimePage() {
 
             </button>
 
-            {/* SUBMIT BUTTON */}
+            {/* SUBMIT */}
             <button
               onClick={
                 handleSubmit
               }
-              className="w-full py-4 rounded-2xl border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.05] transition-all duration-300 font-medium"
+              className="
+                w-full py-4 rounded-2xl
+                border border-slate-200
+                dark:border-white/[0.08]
+                bg-white dark:bg-white/[0.03]
+                hover:bg-blue-500/[0.05]
+                transition-all duration-300
+                font-medium
+                shadow-sm
+                text-slate-700 dark:text-white
+              "
             >
 
               Submit Crime Report
 
             </button>
-
-            {/* SUCCESS */}
-            <AnimatePresence>
-
-              {submitted && (
-
-                <motion.div
-                  initial={{
-                    opacity: 0,
-                    y: 10,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  exit={{
-                    opacity: 0,
-                  }}
-                  className="mt-6 rounded-2xl bg-emerald-500/10 border border-emerald-400/20 p-5 flex items-center gap-4"
-                >
-
-                  <CheckCircle2 className="text-emerald-400 w-6 h-6" />
-
-                  <div>
-
-                    <h3 className="font-medium text-emerald-300">
-
-                      Crime Added To Intelligence Database
-
-                    </h3>
-
-                    <p className="text-sm text-emerald-400/80 mt-1">
-
-                      Incident successfully indexed into
-                      Bengaluru urban intelligence system.
-
-                    </p>
-
-                  </div>
-
-                </motion.div>
-
-              )}
-
-            </AnimatePresence>
-
-            {/* SCAN */}
-            <AnimatePresence>
-
-              {loading && (
-
-                <motion.div
-                  initial={{
-                    opacity: 0,
-                    y: 10,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  exit={{
-                    opacity: 0,
-                  }}
-                  className="mt-8 rounded-2xl border border-white/[0.06] bg-black/20 p-5"
-                >
-
-                  <div className="flex items-center gap-3 mb-5">
-
-                    <ScanSearch className="text-blue-300 w-5 h-5 animate-pulse" />
-
-                    <h3 className="font-medium">
-
-                      Intelligence Scan
-
-                    </h3>
-
-                  </div>
-
-                  <div className="space-y-4">
-
-                    {scanSteps.map(
-                      (
-                        step,
-                        index
-                      ) => (
-
-                        <motion.div
-                          key={step}
-                          animate={{
-                            opacity:
-                              index <=
-                              scanIndex
-                                ? 1
-                                : 0.25,
-                          }}
-                          className="flex items-center gap-3 text-sm"
-                        >
-
-                          <div
-                            className={`w-2 h-2 rounded-full ${
-                              index <=
-                              scanIndex
-                                ? "bg-blue-400"
-                                : "bg-white/10"
-                            }`}
-                          />
-
-                          <span className="text-slate-300">
-
-                            {step}
-
-                          </span>
-
-                        </motion.div>
-
-                      )
-                    )}
-
-                  </div>
-
-                </motion.div>
-
-              )}
-
-            </AnimatePresence>
 
           </div>
 
@@ -568,7 +524,7 @@ function ReportCrimePage() {
         <div className="space-y-6">
 
           {/* AI STATUS */}
-          <div className="rounded-[32px] border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-7 overflow-hidden relative">
+          <div className="rounded-[36px] border border-slate-200/70 dark:border-white/[0.08] bg-white/85 dark:bg-card/70 backdrop-blur-2xl p-7 shadow-[0_20px_60px_rgba(15,23,42,0.06)] dark:shadow-none overflow-hidden relative">
 
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.03] to-cyan-500/[0.01]" />
 
@@ -578,19 +534,19 @@ function ReportCrimePage() {
 
                 <div className="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-400/20 flex items-center justify-center">
 
-                  <Radar className="text-blue-300" />
+                  <Radar className="text-blue-500 dark:text-blue-300" />
 
                 </div>
 
                 <div>
 
-                  <h2 className="text-2xl font-semibold">
+                  <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
 
                     AI Status
 
                   </h2>
 
-                  <p className="text-slate-400 mt-1 text-sm">
+                  <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm">
 
                     Intelligence system synchronization
 
@@ -616,7 +572,7 @@ function ReportCrimePage() {
 
                     <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
 
-                    <p className="text-sm text-slate-300">
+                    <p className="text-sm text-slate-700 dark:text-slate-300">
 
                       {item}
 
@@ -627,150 +583,6 @@ function ReportCrimePage() {
                 ))}
 
               </div>
-
-            </div>
-
-          </div>
-
-          {/* SPATIAL VERIFICATION */}
-          <div className="rounded-[32px] border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-7 overflow-hidden relative">
-
-            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/[0.02] to-blue-500/[0.01]" />
-
-            <div className="relative z-10">
-
-              <div className="flex items-center gap-4 mb-8">
-
-                <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-400/20 flex items-center justify-center">
-
-                  <Activity className="text-cyan-300" />
-
-                </div>
-
-                <div>
-
-                  <h2 className="text-2xl font-semibold">
-
-                    Spatial Verification
-
-                  </h2>
-
-                  <p className="text-slate-400 mt-1 text-sm">
-
-                    GIS intelligence validation
-
-                  </p>
-
-                </div>
-
-              </div>
-
-              <AnimatePresence mode="wait">
-
-                {resolvedLocation ? (
-
-                  <motion.div
-                    initial={{
-                      opacity: 0,
-                      y: 10,
-                    }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                    }}
-                    className="space-y-6"
-                  >
-
-                    <div>
-
-                      <p className="text-xs uppercase tracking-[0.3em] text-slate-500 mb-3">
-
-                        Verified Location
-
-                      </p>
-
-                      <p className="leading-relaxed text-slate-300">
-
-                        {resolvedLocation.display}
-
-                      </p>
-
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-5">
-
-                      <div>
-
-                        <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">
-
-                          Latitude
-
-                        </p>
-
-                        <p className="text-cyan-300">
-
-                          {resolvedLocation.latitude.toFixed(
-                            5
-                          )}
-
-                        </p>
-
-                      </div>
-
-                      <div>
-
-                        <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">
-
-                          Longitude
-
-                        </p>
-
-                        <p className="text-cyan-300">
-
-                          {resolvedLocation.longitude.toFixed(
-                            5
-                          )}
-
-                        </p>
-
-                      </div>
-
-                    </div>
-
-                  </motion.div>
-
-                ) : (
-
-                  <motion.div
-                    initial={{
-                      opacity: 0,
-                    }}
-                    animate={{
-                      opacity: 1,
-                    }}
-                    className="rounded-2xl border border-dashed border-white/[0.08] p-10 text-center"
-                  >
-
-                    <FileWarning className="w-12 h-12 text-blue-300 mx-auto mb-5" />
-
-                    <h3 className="text-lg font-medium mb-2">
-
-                      Awaiting Verification
-
-                    </h3>
-
-                    <p className="text-slate-400 text-sm leading-relaxed">
-
-                      Enter a Bengaluru location to validate
-                      geospatial intelligence coordinates.
-
-                    </p>
-
-                  </motion.div>
-
-                )}
-
-              </AnimatePresence>
 
             </div>
 

@@ -1,4 +1,14 @@
 import {
+  motion,
+} from "framer-motion"
+
+import {
+  Activity,
+  TrendingUp,
+  ShieldAlert,
+} from "lucide-react"
+
+import {
   LineChart,
   Line,
   ResponsiveContainer,
@@ -45,40 +55,90 @@ const COLORS = [
 ]
 
 function AnalyticsPage() {
+
   return (
-    <div>
+    <div className="relative">
+
+      {/* BACKGROUND */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+
+        {/* GRID */}
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)",
+            backgroundSize:
+              "60px 60px",
+          }}
+        />
+
+        {/* GLOWS */}
+        <motion.div
+          animate={{
+            x: [0, 30, 0],
+            y: [0, -20, 0],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+          }}
+          className="absolute top-[-180px] left-[-120px] w-[420px] h-[420px] bg-blue-500/10 blur-[140px] rounded-full"
+        />
+
+        <motion.div
+          animate={{
+            x: [0, -20, 0],
+            y: [0, 20, 0],
+          }}
+          transition={{
+            duration: 18,
+            repeat: Infinity,
+          }}
+          className="absolute bottom-[-160px] right-[-120px] w-[360px] h-[360px] bg-cyan-500/10 blur-[120px] rounded-full"
+        />
+
+      </div>
 
       {/* HERO */}
-      <div className="relative mb-10">
-
-        {/* AMBIENT GLOW */}
-        <div className="absolute top-[-120px] left-[-80px] w-[350px] h-[350px] bg-blue-500/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="relative mb-12">
 
         <div className="relative z-10">
 
-          <div className="flex items-center gap-3 mb-5">
+          {/* BADGES */}
+          <div className="flex flex-wrap items-center gap-3 mb-5">
 
-            <div className="px-5 py-2 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs tracking-[0.25em] uppercase shadow-glow">
+            <div className="px-5 py-2 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-400 dark:text-blue-300 text-[11px] tracking-[0.25em] uppercase shadow-[0_0_20px_rgba(59,130,246,0.15)]">
 
               Crime Intelligence Analytics
 
             </div>
 
-            <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-muted text-xs">
+            <div className="px-4 py-2 rounded-full bg-white/[0.05] border border-white/[0.06] text-slate-600 dark:text-slate-400 text-xs backdrop-blur-xl">
 
               AI Trend Analysis
 
             </div>
 
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-400/20 text-emerald-500 dark:text-emerald-300 text-xs">
+
+              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+
+              Live Neural Insights
+
+            </div>
+
           </div>
 
-          <h1 className="text-5xl xl:text-6xl font-bold leading-[1.05] tracking-tight max-w-5xl">
+          {/* TITLE */}
+          <h1 className="text-5xl xl:text-6xl font-bold leading-[1.02] tracking-tight max-w-5xl text-slate-900 dark:text-white">
 
             Bengaluru Crime Intelligence Analytics
 
           </h1>
 
-          <p className="text-muted text-lg mt-5 max-w-3xl leading-relaxed">
+          {/* DESCRIPTION */}
+          <p className="text-slate-600 dark:text-slate-400 text-xl mt-6 max-w-3xl leading-relaxed">
 
             Advanced crime trend analysis, hotspot ranking,
             category intelligence, and predictive urban
@@ -94,59 +154,113 @@ function AnalyticsPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
 
         {/* CARD 1 */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-card to-[#081225] backdrop-blur-md border border-white/10 rounded-3xl p-6 shadow-[0_0_35px_rgba(59,130,246,0.06)] hover:border-white/20 transition-all duration-300">
+        <div className="relative overflow-hidden bg-card/70 backdrop-blur-2xl border border-white/[0.06] rounded-[32px] p-6">
 
-          <div className="absolute top-[-40px] right-[-40px] w-[140px] h-[140px] bg-blue-500/10 blur-[80px] rounded-full" />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.03] to-transparent" />
 
-          <p className="text-muted text-sm">
-            Crime Growth
-          </p>
+          <div className="absolute top-[-40px] right-[-40px] w-[160px] h-[160px] bg-blue-500/10 blur-[90px] rounded-full" />
 
-          <h2 className="text-4xl font-bold mt-3">
-            +28%
-          </h2>
+          <div className="relative z-10">
 
-          <p className="text-green-400 mt-3 text-sm">
-            Increased intelligence detection
-          </p>
+            <div className="flex items-center justify-between">
+
+              <p className="text-slate-600 dark:text-slate-400 text-sm">
+
+                Crime Growth
+
+              </p>
+
+              <TrendingUp className="text-blue-400 w-5 h-5" />
+
+            </div>
+
+            <h2 className="text-5xl font-bold mt-4 text-slate-900 dark:text-white">
+
+              +28%
+
+            </h2>
+
+            <p className="text-emerald-500 dark:text-emerald-400 mt-4 text-sm">
+
+              Increased intelligence detection
+
+            </p>
+
+          </div>
 
         </div>
 
         {/* CARD 2 */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-card to-[#120b16] backdrop-blur-md border border-white/10 rounded-3xl p-6 shadow-[0_0_35px_rgba(239,68,68,0.06)] hover:border-white/20 transition-all duration-300">
+        <div className="relative overflow-hidden bg-card/70 backdrop-blur-2xl border border-white/[0.06] rounded-[32px] p-6">
 
-          <div className="absolute top-[-40px] right-[-40px] w-[140px] h-[140px] bg-red-500/10 blur-[80px] rounded-full" />
+          <div className="absolute inset-0 bg-gradient-to-br from-red-500/[0.03] to-transparent" />
 
-          <p className="text-muted text-sm">
-            Highest Risk Zone
-          </p>
+          <div className="absolute top-[-40px] right-[-40px] w-[160px] h-[160px] bg-red-500/10 blur-[90px] rounded-full" />
 
-          <h2 className="text-4xl font-bold mt-3">
-            K.R Puram
-          </h2>
+          <div className="relative z-10">
 
-          <p className="text-red-400 mt-3 text-sm">
-            Critical hotspot intensity
-          </p>
+            <div className="flex items-center justify-between">
+
+              <p className="text-slate-600 dark:text-slate-400 text-sm">
+
+                Highest Risk Zone
+
+              </p>
+
+              <ShieldAlert className="text-red-400 w-5 h-5" />
+
+            </div>
+
+            <h2 className="text-4xl font-bold mt-4 text-slate-900 dark:text-white">
+
+              K.R Puram
+
+            </h2>
+
+            <p className="text-red-400 mt-4 text-sm">
+
+              Critical hotspot intensity
+
+            </p>
+
+          </div>
 
         </div>
 
         {/* CARD 3 */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-card to-[#161108] backdrop-blur-md border border-white/10 rounded-3xl p-6 shadow-[0_0_35px_rgba(249,115,22,0.06)] hover:border-white/20 transition-all duration-300">
+        <div className="relative overflow-hidden bg-card/70 backdrop-blur-2xl border border-white/[0.06] rounded-[32px] p-6">
 
-          <div className="absolute top-[-40px] right-[-40px] w-[140px] h-[140px] bg-orange-500/10 blur-[80px] rounded-full" />
+          <div className="absolute inset-0 bg-gradient-to-br from-orange-500/[0.03] to-transparent" />
 
-          <p className="text-muted text-sm">
-            Dominant Crime Type
-          </p>
+          <div className="absolute top-[-40px] right-[-40px] w-[160px] h-[160px] bg-orange-500/10 blur-[90px] rounded-full" />
 
-          <h2 className="text-4xl font-bold mt-3">
-            Theft
-          </h2>
+          <div className="relative z-10">
 
-          <p className="text-orange-400 mt-3 text-sm">
-            34% of total incidents
-          </p>
+            <div className="flex items-center justify-between">
+
+              <p className="text-slate-600 dark:text-slate-400 text-sm">
+
+                Dominant Crime Type
+
+              </p>
+
+              <Activity className="text-orange-400 w-5 h-5" />
+
+            </div>
+
+            <h2 className="text-4xl font-bold mt-4 text-slate-900 dark:text-white">
+
+              Theft
+
+            </h2>
+
+            <p className="text-orange-400 mt-4 text-sm">
+
+              34% of total incidents
+
+            </p>
+
+          </div>
 
         </div>
 
@@ -156,9 +270,9 @@ function AnalyticsPage() {
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
 
         {/* TREND CHART */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-card to-[#081225] backdrop-blur-md border border-white/10 rounded-3xl p-6 shadow-[0_0_50px_rgba(59,130,246,0.08)] hover:border-white/20 transition-all duration-300">
+        <div className="relative overflow-hidden bg-card/70 backdrop-blur-2xl border border-white/[0.06] rounded-[32px] p-6">
 
-          <div className="absolute top-[-50px] right-[-50px] w-[180px] h-[180px] bg-blue-500/10 blur-[100px] rounded-full" />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.03] to-transparent" />
 
           <div className="relative z-10">
 
@@ -166,17 +280,21 @@ function AnalyticsPage() {
 
               <div>
 
-                <h2 className="text-2xl font-semibold">
+                <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
+
                   Yearly Crime Trend
+
                 </h2>
 
-                <p className="text-muted mt-2">
+                <p className="text-slate-600 dark:text-slate-400 mt-2">
+
                   AI-detected urban crime growth patterns
+
                 </p>
 
               </div>
 
-              <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse" />
+              <div className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse" />
 
             </div>
 
@@ -188,7 +306,7 @@ function AnalyticsPage() {
 
                   <CartesianGrid
                     strokeDasharray="3 3"
-                    stroke="rgba(255,255,255,0.05)"
+                    stroke="rgba(148,163,184,0.12)"
                   />
 
                   <XAxis
@@ -202,13 +320,11 @@ function AnalyticsPage() {
 
                   <Tooltip
                     contentStyle={{
-                      background: "#081028",
+                      background: "rgba(15,23,42,0.92)",
                       border: "1px solid rgba(255,255,255,0.08)",
-                      borderRadius: "14px",
+                      borderRadius: "16px",
                       color: "white",
-                    }}
-                    cursor={{
-                      fill: "rgba(255,255,255,0.03)",
+                      backdropFilter: "blur(12px)",
                     }}
                   />
 
@@ -237,9 +353,9 @@ function AnalyticsPage() {
         </div>
 
         {/* PIE CHART */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-card to-[#140b12] backdrop-blur-md border border-white/10 rounded-3xl p-6 shadow-[0_0_50px_rgba(239,68,68,0.08)] hover:border-white/20 transition-all duration-300">
+        <div className="relative overflow-hidden bg-card/70 backdrop-blur-2xl border border-white/[0.06] rounded-[32px] p-6">
 
-          <div className="absolute bottom-[-60px] left-[-60px] w-[180px] h-[180px] bg-red-500/10 blur-[100px] rounded-full" />
+          <div className="absolute inset-0 bg-gradient-to-br from-red-500/[0.03] to-transparent" />
 
           <div className="relative z-10">
 
@@ -247,12 +363,16 @@ function AnalyticsPage() {
 
               <div>
 
-                <h2 className="text-2xl font-semibold">
+                <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
+
                   Crime Distribution
+
                 </h2>
 
-                <p className="text-muted mt-2">
+                <p className="text-slate-600 dark:text-slate-400 mt-2">
+
                   Category intelligence breakdown
+
                 </p>
 
               </div>
@@ -292,13 +412,10 @@ function AnalyticsPage() {
 
                   <Tooltip
                     contentStyle={{
-                      background: "#081028",
+                      background: "rgba(15,23,42,0.92)",
                       border: "1px solid rgba(255,255,255,0.08)",
-                      borderRadius: "14px",
+                      borderRadius: "16px",
                       color: "white",
-                    }}
-                    cursor={{
-                      fill: "rgba(255,255,255,0.03)",
                     }}
                   />
 
@@ -313,9 +430,9 @@ function AnalyticsPage() {
         </div>
 
         {/* BAR CHART */}
-        <div className="xl:col-span-2 relative overflow-hidden bg-gradient-to-br from-card to-[#120d10] backdrop-blur-md border border-white/10 rounded-3xl p-6 shadow-[0_0_50px_rgba(239,68,68,0.06)] hover:border-white/20 transition-all duration-300">
+        <div className="xl:col-span-2 relative overflow-hidden bg-card/70 backdrop-blur-2xl border border-white/[0.06] rounded-[32px] p-6">
 
-          <div className="absolute top-[-80px] right-[20%] w-[260px] h-[260px] bg-red-500/10 blur-[120px] rounded-full" />
+          <div className="absolute inset-0 bg-gradient-to-br from-orange-500/[0.03] to-transparent" />
 
           <div className="relative z-10">
 
@@ -323,12 +440,16 @@ function AnalyticsPage() {
 
               <div>
 
-                <h2 className="text-2xl font-semibold">
+                <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
+
                   High Risk Hotspot Ranking
+
                 </h2>
 
-                <p className="text-muted mt-2">
+                <p className="text-slate-600 dark:text-slate-400 mt-2">
+
                   AI-prioritized crime concentration zones
+
                 </p>
 
               </div>
@@ -345,14 +466,17 @@ function AnalyticsPage() {
 
                   <defs>
                     <linearGradient id="crimeGradient" x1="0" y1="0" x2="0" y2="1">
+
                       <stop offset="0%" stopColor="#ff6b6b" />
+
                       <stop offset="100%" stopColor="#ef4444" />
+
                     </linearGradient>
                   </defs>
 
                   <CartesianGrid
                     strokeDasharray="3 3"
-                    stroke="rgba(255,255,255,0.05)"
+                    stroke="rgba(148,163,184,0.12)"
                   />
 
                   <XAxis
@@ -366,20 +490,17 @@ function AnalyticsPage() {
 
                   <Tooltip
                     contentStyle={{
-                      background: "#081028",
+                      background: "rgba(15,23,42,0.92)",
                       border: "1px solid rgba(255,255,255,0.08)",
-                      borderRadius: "14px",
+                      borderRadius: "16px",
                       color: "white",
-                    }}
-                    cursor={{
-                      fill: "rgba(255,255,255,0.03)",
                     }}
                   />
 
                   <Bar
                     dataKey="risk"
                     fill="url(#crimeGradient)"
-                    radius={[12, 12, 0, 0]}
+                    radius={[14, 14, 0, 0]}
                     barSize={140}
                   />
 

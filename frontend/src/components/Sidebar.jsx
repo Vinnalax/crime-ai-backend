@@ -42,8 +42,9 @@ function Sidebar({
   activePage,
   setActivePage,
 }) {
+
   return (
-    <aside className="w-64 bg-card/70 backdrop-blur-md border-r border-white/10 p-4">
+    <aside className="w-64 bg-card/70 backdrop-blur-2xl border-r border-white/[0.06] p-4 transition-all duration-500">
 
       <div className="mt-6 space-y-2">
 
@@ -62,18 +63,18 @@ function Sidebar({
               }
               className={`
                 relative overflow-hidden
-                w-full flex items-center gap-3 px-4 py-3 rounded-xl
+                w-full flex items-center gap-3 px-4 py-3 rounded-2xl
                 transition-all duration-300 group
 
                 ${active
-                  ? "bg-accent/15 text-white border border-accent/30 shadow-glow"
-                  : "text-muted hover:bg-white/5 hover:text-white hover:translate-x-1"
+                  ? "bg-blue-500/[0.12] text-slate-900 dark:text-white border border-blue-400/20 shadow-[0_0_25px_rgba(59,130,246,0.12)]"
+                  : "text-slate-600 dark:text-slate-400 hover:bg-white/[0.5] dark:hover:bg-white/[0.04] hover:text-slate-900 dark:hover:text-white hover:translate-x-1"
                 }
               `}
             >
 
               {active && (
-                <div className="absolute left-0 top-2 bottom-2 w-1 rounded-full bg-accent shadow-glow" />
+                <div className="absolute left-0 top-2 bottom-2 w-1 rounded-full bg-blue-400" />
               )}
 
               <Icon
@@ -81,8 +82,10 @@ function Sidebar({
                 className="transition-transform duration-300 group-hover:scale-110"
               />
 
-              <span>
+              <span className="font-medium">
+
                 {item.title}
+
               </span>
 
             </button>
@@ -90,6 +93,7 @@ function Sidebar({
         })}
 
       </div>
+
     </aside>
   )
 }

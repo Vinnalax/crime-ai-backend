@@ -21,7 +21,6 @@ import {
   Radar,
   MapPinned,
   Activity,
-  Sparkles,
   ScanSearch,
   ChevronRight,
   Clock3,
@@ -29,6 +28,8 @@ import {
   AlertTriangle,
   BrainCircuit,
 } from "lucide-react"
+
+import { predictCrime } from "../api/crimeApi"
 
 /*
 ==================================================
@@ -134,7 +135,7 @@ function PredictionPage() {
     useMemo(() => {
 
       if (!prediction)
-        return "text-blue-300"
+        return "text-blue-400"
 
       if (
         prediction.risk
@@ -146,7 +147,7 @@ function PredictionPage() {
         prediction.risk
           ?.toLowerCase() === "medium"
       )
-        return "text-amber-300"
+        return "text-amber-400"
 
       return "text-emerald-400"
 
@@ -268,32 +269,13 @@ function PredictionPage() {
             Number(month)
         }
 
-        const response =
-          await fetch(
-            "http://127.0.0.1:8000/predict",
-            {
-              method: "POST",
-
-              headers: {
-                "Content-Type":
-                  "application/json",
-              },
-
-              body:
-                JSON.stringify(
-                  payload
-                ),
-            }
-          )
-
-        if (!response.ok) {
-          throw new Error(
-            "Prediction failed"
-          )
-        }
-
         const data =
-          await response.json()
+          await predictCrime(payload)
+        
+        console.log(
+          "PREDICTION:",
+            data
+        )
 
         setPrediction({
           crime:
@@ -314,7 +296,10 @@ function PredictionPage() {
 
       } catch (error) {
 
-        console.error(error)
+        console.error(
+          "PREDICTION ERROR:",
+          error
+        )
 
         setError(
           "AI prediction pipeline failed"
@@ -372,15 +357,15 @@ function PredictionPage() {
       {/* HERO */}
       <div className="relative z-10 mb-14">
 
-        <div className="flex items-center gap-3 mb-6">
+        <div className="flex flex-wrap items-center gap-3 mb-6">
 
-          <div className="px-5 py-2 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-300 text-[11px] tracking-[0.3em] uppercase">
+          <div className="px-5 py-2 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-400 dark:text-blue-300 text-[11px] tracking-[0.3em] uppercase">
 
             Predictive Intelligence Engine
 
           </div>
 
-          <div className="px-4 py-2 rounded-full bg-white/[0.03] border border-white/10 text-slate-400 text-xs">
+          <div className="px-4 py-2 rounded-full bg-white/[0.05] border border-white/[0.08] text-slate-600 dark:text-slate-400 text-xs backdrop-blur-xl">
 
             AI Crime Forecasting System
 
@@ -388,13 +373,13 @@ function PredictionPage() {
 
         </div>
 
-        <h1 className="text-5xl xl:text-6xl font-bold leading-[1.02] tracking-tight max-w-5xl">
+        <h1 className="text-5xl xl:text-6xl font-bold leading-[1.02] tracking-tight max-w-5xl text-slate-900 dark:text-white">
 
           Predictive Crime Intelligence
 
         </h1>
 
-        <p className="text-slate-400 text-lg mt-6 max-w-3xl leading-relaxed">
+        <p className="text-slate-600 dark:text-slate-400 text-xl mt-6 max-w-3xl leading-relaxed">
 
           AI-powered urban threat forecasting using
           geospatial intelligence, temporal analysis,
@@ -408,30 +393,34 @@ function PredictionPage() {
       <div className="relative z-10 grid grid-cols-1 xl:grid-cols-[420px_1fr] gap-8">
 
         {/* LEFT PANEL */}
-        <div className="rounded-[32px] border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 overflow-hidden relative">
+        <div className="relative overflow-hidden rounded-[36px] border border-slate-200/70 dark:border-white/[0.08] bg-white/85 dark:bg-card/70 backdrop-blur-2xl p-8 shadow-[0_20px_60px_rgba(15,23,42,0.08)] dark:shadow-none">
 
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.03] to-cyan-500/[0.01]" />
+          {/* PREMIUM BACKGROUND */}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.04] via-cyan-500/[0.02] to-transparent dark:from-blue-500/[0.03] dark:to-cyan-500/[0.01]" />
 
           <div className="relative z-10">
 
             {/* HEADER */}
-            <div className="flex items-center gap-4 mb-10">
+            <div className="flex items-center gap-5 mb-10">
 
-              <div className="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-400/20 flex items-center justify-center">
+              <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-blue-500/15 to-cyan-400/10 border border-blue-400/20 flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.15)]">
 
-                <BrainCircuit className="text-blue-300" />
+                <BrainCircuit
+                  className="text-blue-500 dark:text-blue-300"
+                  size={28}
+                />
 
               </div>
 
               <div>
 
-                <h2 className="text-2xl font-semibold">
+                <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
 
                   Prediction Query
 
                 </h2>
 
-                <p className="text-slate-400 text-sm mt-1">
+                <p className="text-slate-500 dark:text-slate-400 text-sm mt-2">
 
                   Spatial + temporal intelligence
 
@@ -442,36 +431,48 @@ function PredictionPage() {
             </div>
 
             {/* QUICK CHIPS */}
-            <div className="flex flex-wrap gap-3 mb-10">
+              <div className="flex flex-wrap gap-3 mb-10">
 
-              {[
-                "Whitefield",
-                "KR Puram",
-                "Electronic City",
-                "Indiranagar",
-                "Koramangala",
-              ].map((item) => (
+                {[
+                  "Whitefield",
+                  "KR Puram",
+                  "Electronic City",
+                  "Indiranagar",
+                  "Koramangala",
+                ].map((item) => (
 
-                <button
-                  key={item}
-                  onClick={() =>
-                    setLocation(item)
-                  }
-                  className="px-5 py-3 rounded-2xl border border-white/[0.08] bg-white/[0.03] text-sm text-slate-300 hover:border-blue-400/20 hover:bg-blue-500/[0.05] transition-all duration-300"
-                >
+                  <button
+                    key={item}
+                    onClick={() =>
+                      setLocation(item)
+                    }
+                    className="
+                      px-5 py-3 rounded-2xl
+                      border border-slate-200 dark:border-white/[0.08]
+                      bg-white dark:bg-white/[0.03]
+                      text-sm font-medium
+                      text-slate-700 dark:text-slate-300
+                      shadow-sm
+                      hover:border-blue-400/30
+                      hover:bg-blue-500/[0.06]
+                      hover:-translate-y-0.5
+                      transition-all duration-300
+                      backdrop-blur-xl
+                    "
+                    >
 
-                  {item}
+                      {item}
 
-                </button>
+                    </button>
 
-              ))}
+                ))}
 
             </div>
 
             {/* LOCATION */}
-            <div className="mb-7">
+            <div className="mb-8">
 
-              <label className="text-sm text-slate-400 mb-3 block">
+              <label className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-3 block">
 
                 Target Location
 
@@ -479,7 +480,7 @@ function PredictionPage() {
 
               <div className="relative">
 
-                <MapPinned className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-300" />
+                <MapPinned className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-500 dark:text-blue-300" />
 
                 <input
                   type="text"
@@ -490,19 +491,35 @@ function PredictionPage() {
                       e.target.value
                     )
                   }
-                  className="w-full bg-black/20 border border-white/[0.08] rounded-2xl pl-12 pr-5 py-4 outline-none focus:border-blue-400/30 transition-all text-white placeholder:text-slate-500"
+                  className="
+                    w-full
+                    bg-white dark:bg-black/20
+                    border border-slate-200 dark:border-white/[0.08]
+                    rounded-2xl
+                    pl-12 pr-5 py-4
+                    outline-none
+                    shadow-inner
+                    focus:border-blue-400/40
+                    focus:ring-4
+                    focus:ring-blue-500/10
+                    transition-all
+                    text-slate-900 dark:text-white
+                    placeholder:text-slate-400
+                    backdrop-blur-xl
+                  "
                 />
 
               </div>
 
             </div>
 
-            {/* TEMPORAL */}
-            <div className="grid grid-cols-2 gap-5 mb-10">
+            {/* TIME INPUTS */}
+            <div className="grid grid-cols-2 gap-4 mb-8">
 
+              {/* HOUR */}
               <div>
 
-                <label className="text-sm text-slate-400 mb-3 block">
+                <label className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-3 block">
 
                   Hour
 
@@ -510,29 +527,42 @@ function PredictionPage() {
 
                 <div className="relative">
 
-                  <Clock3 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-300" />
+                  <Clock3 className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-500 dark:text-blue-300" />
 
                   <input
                     type="number"
                     min="0"
                     max="23"
-                    placeholder="Current"
                     value={hour}
                     onChange={(e) =>
-                      setHour(
-                        e.target.value
-                      )
+                      setHour(e.target.value)
                     }
-                    className="w-full bg-black/20 border border-white/[0.08] rounded-2xl pl-12 pr-5 py-4 outline-none focus:border-blue-400/30 transition-all text-white placeholder:text-slate-500"
+                    placeholder="Current"
+                    className="
+                      w-full
+                      bg-white dark:bg-black/20
+                      border border-slate-200 dark:border-white/[0.08]
+                      rounded-2xl
+                      pl-11 pr-4 py-4
+                      outline-none
+                      shadow-inner
+                      focus:border-blue-400/40
+                      focus:ring-4
+                      focus:ring-blue-500/10
+                      transition-all
+                      text-slate-900 dark:text-white
+                      placeholder:text-slate-400
+                    "
                   />
 
                 </div>
 
               </div>
 
+              {/* MONTH */}
               <div>
 
-                <label className="text-sm text-slate-400 mb-3 block">
+                <label className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-3 block">
 
                   Month
 
@@ -540,20 +570,32 @@ function PredictionPage() {
 
                 <div className="relative">
 
-                  <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-300" />
+                  <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-500 dark:text-blue-300" />
 
                   <input
                     type="number"
                     min="1"
                     max="12"
-                    placeholder="Current"
                     value={month}
                     onChange={(e) =>
-                      setMonth(
-                        e.target.value
-                      )
+                      setMonth(e.target.value)
                     }
-                    className="w-full bg-black/20 border border-white/[0.08] rounded-2xl pl-12 pr-5 py-4 outline-none focus:border-blue-400/30 transition-all text-white placeholder:text-slate-500"
+                    placeholder="Current"
+                    className="
+                      w-full
+                      bg-white dark:bg-black/20
+                      border border-slate-200 dark:border-white/[0.08]
+                      rounded-2xl
+                      pl-11 pr-4 py-4
+                      outline-none
+                      shadow-inner
+                      focus:border-blue-400/40
+                      focus:ring-4
+                      focus:ring-blue-500/10
+                      transition-all
+                      text-slate-900 dark:text-white
+                      placeholder:text-slate-400
+                    "
                   />
 
                 </div>
@@ -562,110 +604,86 @@ function PredictionPage() {
 
             </div>
 
-            {/* BUTTON */}
-            <button
-              onClick={
-                handlePrediction
-              }
-              className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-500 hover:opacity-90 transition-all duration-300 font-medium shadow-2xl shadow-blue-500/20"
+            {/* RUN BUTTON */}
+            <motion.button
+              whileHover={{
+                scale: 1.015,
+              }}
+              whileTap={{
+                scale: 0.98,
+              }}
+              onClick={handlePrediction}
+              disabled={loading}
+              className="
+                relative overflow-hidden
+                w-full rounded-2xl
+                py-4 px-6
+                font-semibold
+                text-white
+                bg-gradient-to-r
+                from-blue-600
+                via-blue-500
+                to-cyan-500
+                shadow-[0_10px_35px_rgba(59,130,246,0.35)]
+                hover:shadow-[0_15px_45px_rgba(59,130,246,0.45)]
+                transition-all duration-300
+                disabled:opacity-60
+              "
             >
 
-              {loading
-                ? "Running Intelligence..."
-                : "Run AI Prediction"}
+              <div className="absolute inset-0 bg-white/10 opacity-0 hover:opacity-100 transition-opacity" />
 
-            </button>
+              <div className="relative flex items-center justify-center gap-3">
+
+                <ScanSearch size={20} />
+
+                <span>
+
+                  {loading
+                    ? "Running AI Analysis..."
+                    : "Run AI Prediction"}
+
+                </span>
+
+              </div>
+
+            </motion.button>
 
             {/* ERROR */}
             {error && (
 
-              <div className="mt-5 bg-red-500/10 border border-red-400/20 rounded-2xl p-4 text-red-300 text-sm">
+              <motion.div
+                initial={{
+                  opacity: 0,
+                  y: 10,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                className="
+                  mt-6 rounded-2xl
+                  border border-red-400/20
+                  bg-red-500/10
+                  p-4
+                  flex items-start gap-3
+                "
+              >
 
-                {error}
+                <AlertTriangle
+                  className="text-red-400 mt-0.5"
+                  size={18}
+                />
 
-              </div>
+                <p className="text-red-500 dark:text-red-300 text-sm">
+
+                  {error}
+
+                </p>
+
+              </motion.div>
 
             )}
-
-            {/* SCAN */}
-            <AnimatePresence>
-
-              {loading && (
-
-                <motion.div
-                  initial={{
-                    opacity: 0,
-                    y: 10,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  exit={{
-                    opacity: 0,
-                  }}
-                  className="mt-8 rounded-2xl border border-white/[0.06] bg-black/20 p-5"
-                >
-
-                  <div className="flex items-center gap-3 mb-5">
-
-                    <ScanSearch className="text-blue-300 w-5 h-5 animate-pulse" />
-
-                    <h3 className="font-medium">
-
-                      Intelligence Scan
-
-                    </h3>
-
-                  </div>
-
-                  <div className="space-y-4">
-
-                    {scanSteps.map(
-                      (
-                        step,
-                        index
-                      ) => (
-
-                        <motion.div
-                          key={step}
-                          animate={{
-                            opacity:
-                              index <=
-                              scanIndex
-                                ? 1
-                                : 0.25,
-                          }}
-                          className="flex items-center gap-3 text-sm"
-                        >
-
-                          <div
-                            className={`w-2 h-2 rounded-full ${
-                              index <=
-                              scanIndex
-                                ? "bg-blue-400"
-                                : "bg-white/10"
-                            }`}
-                          />
-
-                          <span className="text-slate-300">
-
-                            {step}
-
-                          </span>
-
-                        </motion.div>
-
-                      )
-                    )}
-
-                  </div>
-
-                </motion.div>
-
-              )}
-
-            </AnimatePresence>
 
           </div>
 
@@ -675,9 +693,9 @@ function PredictionPage() {
         <div className="space-y-8">
 
           {/* THREAT PANEL */}
-          <div className="rounded-[36px] border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-10 overflow-hidden relative">
+          <div className="relative overflow-hidden rounded-[36px] border border-slate-200/70 dark:border-white/[0.08] bg-white/85 dark:bg-card/70 backdrop-blur-2xl p-10 shadow-[0_20px_60px_rgba(15,23,42,0.08)] dark:shadow-none">
 
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.03] to-cyan-500/[0.01]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.04] to-cyan-500/[0.015] dark:from-blue-500/[0.03] dark:to-cyan-500/[0.01]" />
 
             <div className="absolute top-[-100px] right-[5%] w-[260px] h-[260px] bg-blue-500/10 blur-[120px] rounded-full" />
 
@@ -698,23 +716,27 @@ function PredictionPage() {
                   className="absolute w-[260px] h-[260px] rounded-full border border-dashed border-blue-400/[0.12]"
                 />
 
-                <div className="relative w-[180px] h-[180px] rounded-full border border-white/[0.08] bg-black/20 backdrop-blur-2xl flex flex-col items-center justify-center shadow-[0_0_80px_rgba(59,130,246,0.12)]">
+                <div className="relative w-[180px] h-[180px] rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 p-[2px] shadow-[0_0_50px_rgba(59,130,246,0.25)]">
 
-                  <ShieldAlert className="w-8 h-8 text-blue-300 mb-3" />
+                  <div className="w-full h-full rounded-full bg-white dark:bg-[#081120] flex flex-col items-center justify-center">
 
-                  <h1 className={`text-5xl font-bold ${riskColor}`}>
+                    <ShieldAlert className="w-8 h-8 text-blue-500 dark:text-blue-300 mb-3" />
 
-                    {prediction
-                      ? `${prediction.confidence}%`
-                      : "--"}
+                    <h1 className={`text-5xl font-bold ${riskColor}`}>
 
-                  </h1>
+                      {prediction
+                        ? `${prediction.confidence}%`
+                        : "--"}
 
-                  <p className="text-[11px] uppercase tracking-[0.3em] text-slate-500 mt-2">
+                    </h1>
 
-                    Threat Score
+                    <p className="text-[11px] uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400 mt-2">
 
-                  </p>
+                      Threat Score
+
+                    </p>
+
+                  </div>
 
                 </div>
 
@@ -727,19 +749,19 @@ function PredictionPage() {
 
                   <div className="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-400/20 flex items-center justify-center">
 
-                    <Radar className="text-blue-300" />
+                    <Radar className="text-blue-500 dark:text-blue-300" />
 
                   </div>
 
                   <div>
 
-                    <h2 className="text-3xl font-semibold">
+                    <h2 className="text-3xl font-semibold text-slate-900 dark:text-white">
 
                       Threat Intelligence
 
                     </h2>
 
-                    <p className="text-slate-400 mt-1">
+                    <p className="text-slate-500 dark:text-slate-400 mt-1">
 
                       Neural inference prediction output
 
@@ -753,7 +775,7 @@ function PredictionPage() {
 
                   <div>
 
-                    <h1 className="text-6xl leading-none font-bold tracking-tight">
+                    <h1 className="text-6xl leading-none font-bold tracking-tight text-slate-900 dark:text-white">
 
                       {prediction.crime}
 
@@ -763,7 +785,7 @@ function PredictionPage() {
 
                       <div className="px-6 py-4 rounded-2xl bg-blue-500/[0.06] border border-blue-400/10">
 
-                        <p className="text-[11px] uppercase tracking-[0.3em] text-slate-500 mb-2">
+                        <p className="text-[11px] uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400 mb-2">
 
                           Risk Level
 
@@ -777,15 +799,15 @@ function PredictionPage() {
 
                       </div>
 
-                      <div className="px-6 py-4 rounded-2xl bg-white/[0.03] border border-white/[0.06]">
+                      <div className="px-6 py-4 rounded-2xl bg-white dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.06] shadow-sm">
 
-                        <p className="text-[11px] uppercase tracking-[0.3em] text-slate-500 mb-2">
+                        <p className="text-[11px] uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400 mb-2">
 
                           Confidence
 
                         </p>
 
-                        <p className="text-2xl font-semibold text-blue-300">
+                        <p className="text-2xl font-semibold text-blue-500 dark:text-blue-300">
 
                           {prediction.confidence}%
 
@@ -799,11 +821,68 @@ function PredictionPage() {
 
                 ) : (
 
-                  <div className="text-slate-400 leading-relaxed max-w-2xl text-lg">
+                  <div>
 
-                    Run AI prediction to generate
-                    geospatial threat forecasting and
-                    predictive urban intelligence analysis.
+                    <div className="text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl text-lg">
+
+                      Run AI prediction to generate
+                      geospatial threat forecasting and
+                      predictive urban intelligence analysis.
+
+                    </div>
+
+                    {/* METRICS */}
+                    <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-5">
+
+                      <div className="rounded-3xl border border-slate-200 dark:border-white/[0.06] bg-white/70 dark:bg-background/40 p-5 shadow-sm">
+
+                        <p className="text-slate-500 dark:text-slate-400 text-sm">
+
+                          AI Confidence
+
+                        </p>
+
+                        <h3 className="text-3xl font-bold mt-3 text-slate-900 dark:text-white">
+
+                          94%
+
+                        </h3>
+
+                      </div>
+
+                      <div className="rounded-3xl border border-slate-200 dark:border-white/[0.06] bg-white/70 dark:bg-background/40 p-5 shadow-sm">
+
+                        <p className="text-slate-500 dark:text-slate-400 text-sm">
+
+                          Risk Level
+
+                        </p>
+
+                        <h3 className="text-3xl font-bold mt-3 text-orange-500">
+
+                          Moderate
+
+                        </h3>
+
+                      </div>
+
+                      <div className="rounded-3xl border border-slate-200 dark:border-white/[0.06] bg-white/70 dark:bg-background/40 p-5 shadow-sm">
+
+                        <p className="text-slate-500 dark:text-slate-400 text-sm">
+
+                          Predicted Density
+
+                        </p>
+
+                        <h3 className="text-3xl font-bold mt-3 text-cyan-500">
+
+                          71%
+
+                        </h3>
+
+                      </div>
+
+                    </div>
 
                   </div>
 
@@ -819,13 +898,13 @@ function PredictionPage() {
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
             {/* SPATIAL */}
-            <div className="rounded-[30px] border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-6">
+            <div className="rounded-[30px] border border-slate-200 dark:border-white/[0.08] bg-white/85 dark:bg-white/[0.03] backdrop-blur-2xl p-6 shadow-sm">
 
               <div className="flex items-center gap-3 mb-6">
 
-                <MapPinned className="text-blue-300" />
+                <MapPinned className="text-blue-500 dark:text-blue-300" />
 
-                <h3 className="text-lg font-semibold">
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
 
                   Spatial Metadata
 
@@ -837,13 +916,13 @@ function PredictionPage() {
 
                 <div>
 
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 mb-2">
 
                     Resolved Location
 
                   </p>
 
-                  <p className="text-sm leading-relaxed text-slate-300">
+                  <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
 
                     {resolvedLocation ||
                       "Awaiting location input"}
@@ -857,13 +936,13 @@ function PredictionPage() {
                   <>
                     <div>
 
-                      <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">
+                      <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 mb-2">
 
                         Latitude
 
                       </p>
 
-                      <p className="text-cyan-300">
+                      <p className="text-blue-500 dark:text-cyan-300">
 
                         {prediction.latitude.toFixed(
                           5
@@ -875,13 +954,13 @@ function PredictionPage() {
 
                     <div>
 
-                      <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">
+                      <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 mb-2">
 
                         Longitude
 
                       </p>
 
-                      <p className="text-cyan-300">
+                      <p className="text-blue-500 dark:text-cyan-300">
 
                         {prediction.longitude.toFixed(
                           5
@@ -899,13 +978,13 @@ function PredictionPage() {
             </div>
 
             {/* AI STATUS */}
-            <div className="rounded-[30px] border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-6">
+            <div className="rounded-[30px] border border-slate-200 dark:border-white/[0.08] bg-white/85 dark:bg-white/[0.03] backdrop-blur-2xl p-6 shadow-sm">
 
               <div className="flex items-center gap-3 mb-6">
 
-                <Activity className="text-blue-300" />
+                <Activity className="text-blue-500 dark:text-blue-300" />
 
-                <h3 className="text-lg font-semibold">
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
 
                   AI Status
 
@@ -929,7 +1008,7 @@ function PredictionPage() {
 
                     <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
 
-                    <p className="text-sm text-slate-300">
+                    <p className="text-sm text-slate-700 dark:text-slate-300">
 
                       {item}
 
@@ -944,19 +1023,19 @@ function PredictionPage() {
             </div>
 
             {/* AI RECOMMENDATIONS */}
-            <div className="rounded-[30px] border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-6">
+            <div className="rounded-[30px] border border-slate-200 dark:border-white/[0.08] bg-white/85 dark:bg-white/[0.03] backdrop-blur-2xl p-6 shadow-sm">
 
               <div className="flex items-center justify-between mb-6">
 
                 <div>
 
-                  <h2 className="text-xl font-semibold">
+                  <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
 
                     AI Recommendations
 
                   </h2>
 
-                  <p className="text-slate-400 mt-2 text-sm">
+                  <p className="text-slate-500 dark:text-slate-400 mt-2 text-sm">
 
                     Predictive operational guidance
 
@@ -964,7 +1043,7 @@ function PredictionPage() {
 
                 </div>
 
-                <AlertTriangle className="text-blue-300" />
+                <AlertTriangle className="text-blue-500 dark:text-blue-300" />
 
               </div>
 
@@ -978,14 +1057,14 @@ function PredictionPage() {
                         x: 4,
                       }}
                       key={item}
-                      className="bg-black/20 border border-white/[0.06] rounded-2xl p-4 hover:border-blue-400/20 transition-all duration-300"
+                      className="bg-white dark:bg-black/20 border border-slate-200 dark:border-white/[0.06] rounded-2xl p-4 hover:border-blue-400/20 transition-all duration-300 shadow-sm"
                     >
 
                       <div className="flex gap-3">
 
-                        <ChevronRight className="text-blue-300 w-5 h-5 mt-0.5" />
+                        <ChevronRight className="text-blue-500 dark:text-blue-300 w-5 h-5 mt-0.5" />
 
-                        <p className="leading-relaxed text-sm text-slate-300">
+                        <p className="leading-relaxed text-sm text-slate-700 dark:text-slate-300">
 
                           {item}
 
@@ -1005,9 +1084,9 @@ function PredictionPage() {
           </div>
 
           {/* TIMELINE */}
-          <div className="rounded-[32px] border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-7 overflow-hidden relative">
+          <div className="relative overflow-hidden rounded-[36px] border border-slate-200/70 dark:border-white/[0.08] bg-white/90 dark:bg-[#071226] backdrop-blur-2xl p-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)] dark:shadow-none">
 
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.02] to-cyan-500/[0.01]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.03] to-cyan-500/[0.01]" />
 
             <div className="relative z-10">
 
@@ -1015,13 +1094,13 @@ function PredictionPage() {
 
                 <div>
 
-                  <h2 className="text-2xl font-semibold">
+                  <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
 
                     24-Hour Threat Projection
 
                   </h2>
 
-                  <p className="text-slate-400 mt-2">
+                  <p className="text-slate-500 dark:text-slate-400 mt-2">
 
                     AI projected hotspot intensity timeline
 
@@ -1067,7 +1146,7 @@ function PredictionPage() {
 
                     <CartesianGrid
                       strokeDasharray="3 3"
-                      stroke="rgba(255,255,255,0.04)"
+                      stroke="rgba(148,163,184,0.12)"
                     />
 
                     <XAxis

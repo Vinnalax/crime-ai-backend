@@ -1,4 +1,8 @@
-import { useState } from "react"
+console.log(
+  import.meta.env.VITE_API_BASE_URL
+)
+
+import { useEffect, useState } from "react"
 
 import {
   AnimatePresence,
@@ -15,34 +19,102 @@ import ReportCrimePage from "./pages/ReportCrimePage"
 
 function App() {
 
+  /*
+  ==========================================
+  PAGE STATE
+  ==========================================
+  */
+
   const [activePage, setActivePage] =
     useState("overview")
 
-  const renderPage = () => {
+  /*
+  ==========================================
+  THEME STATE
+  ==========================================
+  */
 
-    switch (activePage) {
+  const [theme, setTheme] =
+    useState(
+      localStorage.getItem("theme") ||
+      "dark"
+    )
 
-      case "heatmap":
-        return <HeatmapPage />
+  /*
+  ==========================================
+  APPLY THEME
+  ==========================================
+  */
 
-      case "analytics":
-        return <AnalyticsPage />
+  useEffect(() => {
 
-      case "prediction":
-        return <PredictionPage />
+    document.documentElement.classList.remove(
+      "light",
+      "dark"
+    )
 
-      case "report":
-        return <ReportCrimePage />
+    document.documentElement.classList.add(
+      theme
+    )
 
-      default:
-        return <OverviewPage />
+    localStorage.setItem(
+      "theme",
+      theme
+    )
+    
+  }, [theme])
+
+  /*
+  ==========================================
+  TOGGLE THEME
+  ==========================================
+  */
+
+  const toggleTheme =
+    () => {
+
+      setTheme((prev) =>
+        prev === "dark"
+          ? "light"
+          : "dark"
+      )
+
     }
-  }
+
+  /*
+  ==========================================
+  RENDER PAGE
+  ==========================================
+  */
+
+  const renderPage =
+    () => {
+
+      switch (activePage) {
+
+        case "heatmap":
+          return <HeatmapPage />
+
+        case "analytics":
+          return <AnalyticsPage />
+
+        case "prediction":
+          return <PredictionPage />
+
+        case "report":
+          return <ReportCrimePage />
+
+        default:
+          return <OverviewPage />
+      }
+    }
 
   return (
     <MainLayout
       activePage={activePage}
       setActivePage={setActivePage}
+      theme={theme}
+      toggleTheme={toggleTheme}
     >
 
       <AnimatePresence mode="wait">
@@ -52,17 +124,14 @@ function App() {
           initial={{
             opacity: 0,
             y: 12,
-            filter: "blur(10px)",
           }}
           animate={{
             opacity: 1,
             y: 0,
-            filter: "blur(0px)",
           }}
           exit={{
             opacity: 0,
             y: -12,
-            filter: "blur(10px)",
           }}
           transition={{
             duration: 0.35,

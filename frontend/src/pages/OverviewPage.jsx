@@ -130,19 +130,19 @@ function OverviewPage() {
           {/* BADGES */}
           <div className="flex flex-wrap items-center gap-3 mb-5">
 
-            <div className="px-5 py-2 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-300 text-[11px] tracking-[0.3em] uppercase shadow-[0_0_20px_rgba(59,130,246,0.15)]">
+            <div className="px-5 py-2 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-400 dark:text-blue-300 text-[11px] tracking-[0.3em] uppercase shadow-[0_0_20px_rgba(59,130,246,0.15)]">
 
               Bengaluru Urban Intelligence
 
             </div>
 
-            <div className="px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.06] text-slate-400 text-xs">
+            <div className="px-4 py-2 rounded-full bg-white/[0.04] border border-white/[0.06] text-slate-600 dark:text-slate-400 text-xs backdrop-blur-xl">
 
               AI-Powered GIS Platform
 
             </div>
 
-            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-400/20 text-emerald-300 text-xs">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-400/20 text-emerald-500 dark:text-emerald-300 text-xs">
 
               <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
 
@@ -153,7 +153,7 @@ function OverviewPage() {
           </div>
 
           {/* TITLE */}
-          <h1 className="text-6xl xl:text-7xl font-bold leading-[1.02] tracking-tight max-w-6xl">
+          <h1 className="text-6xl xl:text-7xl font-bold leading-[1.02] tracking-tight max-w-6xl text-slate-900 dark:text-white">
 
             Bengaluru Crime Heatmap &
             Geospatial Intelligence Platform
@@ -161,7 +161,7 @@ function OverviewPage() {
           </h1>
 
           {/* DESCRIPTION */}
-          <p className="text-slate-400 text-xl mt-7 max-w-3xl leading-relaxed">
+          <p className="text-slate-600 dark:text-slate-400 text-xl mt-7 max-w-3xl leading-relaxed">
 
             AI-powered geospatial crime intelligence
             system designed for hotspot analysis,
@@ -182,12 +182,12 @@ function OverviewPage() {
 
               <div
                 key={item}
-                className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-xl"
+                className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/[0.45] dark:bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl"
               >
 
                 <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
 
-                <span className="text-sm text-slate-300">
+                <span className="text-sm text-slate-700 dark:text-slate-300">
 
                   {item}
 
@@ -268,7 +268,7 @@ function OverviewPage() {
 
               <div className="flex items-center gap-3 mb-3">
 
-                <div className="px-3 py-1 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-300 text-[10px] tracking-[0.3em] uppercase">
+                <div className="px-3 py-1 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-400 dark:text-blue-300 text-[10px] tracking-[0.3em] uppercase">
 
                   Live GIS Grid
 
@@ -278,13 +278,13 @@ function OverviewPage() {
 
               </div>
 
-              <h2 className="text-3xl font-semibold">
+              <h2 className="text-3xl font-semibold text-slate-900 dark:text-white">
 
                 Bengaluru Crime Intelligence
 
               </h2>
 
-              <p className="text-slate-400 mt-3">
+              <p className="text-slate-600 dark:text-slate-400 mt-3">
 
                 Real-time geospatial hotspot monitoring
                 powered by AI-driven urban intelligence.
@@ -293,58 +293,48 @@ function OverviewPage() {
 
             </div>
 
-            <Radar className="text-cyan-300 w-7 h-7" />
+            <Radar className="text-cyan-400 dark:text-cyan-300 w-7 h-7" />
 
           </div>
 
           {/* MAP */}
           <div className="relative h-[500px] rounded-[28px] overflow-hidden border border-white/[0.04]">
 
-            {/* MAP GLOW */}
-            <div className="absolute inset-0 z-[400] pointer-events-none bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.12),transparent_70%)]" />
+            {/* FLOATING INFO */}
+            <div className="absolute bottom-6 left-6 right-6 z-[500] flex items-end justify-between pointer-events-none">
 
-            {/* TOP FADE */}
-            <div className="absolute inset-x-0 top-0 h-32 z-[500] pointer-events-none bg-gradient-to-b from-[#020617] to-transparent" />
+              <div className="max-w-xl">
 
-            {/* BOTTOM OVERLAY */}
-            <div className="absolute bottom-0 left-0 right-0 z-[500] p-6 bg-gradient-to-t from-[#020617] via-[#020617]/80 to-transparent">
+                <p className="text-xs uppercase tracking-[0.35em] text-cyan-300 mb-3 font-medium drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
 
-              <div className="flex items-center justify-between">
+                  Spatial Intelligence
 
-                <div>
+                </p>
 
-                  <p className="text-sm uppercase tracking-[0.3em] text-cyan-300 mb-2">
+                <h3 className="text-3xl font-bold text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.85)]">
 
-                    Spatial Intelligence
+                  Live Hotspot Visualization
 
-                  </p>
+                </h3>
 
-                  <h3 className="text-2xl font-semibold">
+                <p className="text-slate-200 mt-3 text-sm leading-relaxed drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
 
-                    Live Hotspot Visualization
+                  Real-time Bengaluru crime density
+                  and hotspot clustering analysis.
 
-                  </h3>
+                </p>
 
-                  <p className="text-slate-400 mt-2 text-sm">
+              </div>
 
-                    Real-time Bengaluru crime density
-                    and hotspot clustering analysis.
+              <div className="hidden md:flex items-center gap-3 px-5 py-3 rounded-2xl bg-black/30 backdrop-blur-md border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
 
-                  </p>
+                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
 
-                </div>
+                <span className="text-sm text-white">
 
-                <div className="hidden md:flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/[0.04] border border-white/[0.06] backdrop-blur-xl">
+                  Live Intelligence Feed
 
-                  <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-
-                  <span className="text-sm text-slate-300">
-
-                    Live Intelligence Feed
-
-                  </span>
-
-                </div>
+                </span>
 
               </div>
 
@@ -361,7 +351,8 @@ function OverviewPage() {
             >
 
               <TileLayer
-                url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                attribution='&copy; OpenStreetMap contributors & CartoDB'
+                url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
               />
 
               {hotspots.map(
@@ -437,13 +428,13 @@ function OverviewPage() {
 
                 <div>
 
-                  <h2 className="text-3xl font-semibold">
+                  <h2 className="text-3xl font-semibold text-slate-900 dark:text-white">
 
                     Top Hotspot Zones
 
                   </h2>
 
-                  <p className="text-slate-400 mt-2">
+                  <p className="text-slate-600 dark:text-slate-400 mt-2">
 
                     AI-prioritized spatial risk zones
 
@@ -451,7 +442,7 @@ function OverviewPage() {
 
                 </div>
 
-                <ShieldAlert className="text-red-300" />
+                <ShieldAlert className="text-red-400 dark:text-red-300" />
 
               </div>
 
@@ -465,7 +456,7 @@ function OverviewPage() {
                         x: 4,
                       }}
                       key={zone.zone}
-                      className="bg-background/60 border border-white/[0.04] rounded-2xl p-4"
+                      className="bg-white/50 dark:bg-background/60 border border-white/[0.05] rounded-2xl p-4 backdrop-blur-xl"
                     >
 
                       <div className="flex items-center justify-between mb-4">
@@ -474,7 +465,7 @@ function OverviewPage() {
 
                           <div className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
 
-                          <span className="font-medium">
+                          <span className="font-medium text-slate-900 dark:text-white">
 
                             {zone.zone}
 
@@ -490,7 +481,7 @@ function OverviewPage() {
 
                       </div>
 
-                      <div className="h-2 rounded-full bg-white/[0.04] overflow-hidden">
+                      <div className="h-2 rounded-full bg-black/[0.04] dark:bg-white/[0.04] overflow-hidden">
 
                         <motion.div
                           initial={{
@@ -529,13 +520,13 @@ function OverviewPage() {
 
                 <div>
 
-                  <h2 className="text-2xl font-semibold">
+                  <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
 
                     Intelligence Activity
 
                   </h2>
 
-                  <p className="text-slate-400 mt-2 text-sm">
+                  <p className="text-slate-600 dark:text-slate-400 mt-2 text-sm">
 
                     Live neural monitoring events
 
@@ -543,7 +534,7 @@ function OverviewPage() {
 
                 </div>
 
-                <Activity className="text-cyan-300" />
+                <Activity className="text-cyan-400 dark:text-cyan-300" />
 
               </div>
 
@@ -557,14 +548,14 @@ function OverviewPage() {
                         x: 3,
                       }}
                       key={item}
-                      className="flex items-start gap-3 p-4 rounded-2xl bg-background/50 border border-white/[0.04]"
+                      className="flex items-start gap-3 p-4 rounded-2xl bg-white/50 dark:bg-background/50 border border-white/[0.05] backdrop-blur-xl"
                     >
 
                       <div className="w-2 h-2 rounded-full bg-cyan-400 mt-2 animate-pulse" />
 
                       <div>
 
-                        <p className="text-sm leading-relaxed text-slate-300">
+                        <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
 
                           {item}
 
