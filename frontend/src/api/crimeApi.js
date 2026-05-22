@@ -9,6 +9,18 @@ const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
   "http://localhost:8000"
 
+export const normalizeHotspot = (spot) => ({
+  clusterId: spot.cluster_id,
+
+  lat: Number(spot.center_lat),
+  lng: Number(spot.center_lng),
+
+  crimeCount: Number(spot.crime_count || 0),
+  riskScore: Number(spot.risk_score || 0),
+
+  intensity: Number(spot.risk_score || 0),
+})
+
 export const predictCrime = async (
   payload
 ) => {
@@ -43,13 +55,17 @@ HOTSPOTS
 */
 
 export const getHotspots = async () => {
+  const response = await api.get("/hotspots")
 
-  const response = await api.get(
-    "/hotspots"
-  )
+  return {
+    ...response.data,
 
-  return response.data
+    hotspots: (response.data.hotspots || []).map(
+      normalizeHotspot
+    ),
+  }
 }
+
 
 /*
 ====================================
@@ -84,7 +100,7 @@ export const getHotspotAnalytics =
       await fetch(
         `${API_BASE_URL}/hotspots`
       )
-      
+
     if (!response.ok) {
 
       throw new Error(
@@ -112,4 +128,3 @@ export const reportCrime = async (
 
   return response.data
 }
-

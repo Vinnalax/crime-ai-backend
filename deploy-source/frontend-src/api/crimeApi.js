@@ -84,7 +84,7 @@ export const getHotspotAnalytics =
       await fetch(
         `${API_BASE_URL}/hotspots`
       )
-
+      
     if (!response.ok) {
 
       throw new Error(

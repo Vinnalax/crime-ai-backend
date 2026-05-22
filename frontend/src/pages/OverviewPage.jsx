@@ -28,6 +28,7 @@ import {
 } from "../api/crimeApi"
 
 
+
 const liveFeed = [
   "Neural hotspot clustering synchronized",
   "Temporal anomaly spike detected in Whitefield",
@@ -300,6 +301,8 @@ function OverviewPage() {
     loadHotspots()
 
   }, [])
+
+  console.log("MAP HOTSPOTS:", hotspots)
 
   return (
     <div className="relative">
@@ -585,6 +588,7 @@ function OverviewPage() {
                 ) => (
 
                   <CircleMarker
+                    pane="markerPane"
                     key={index}
                     center={[
                       hotspot.lat,
@@ -613,6 +617,7 @@ function OverviewPage() {
                 ) => (
 
                   <CircleMarker
+                    pane="markerPane"
                     key={`core-${index}`}
                     center={[
                       hotspot.lat,

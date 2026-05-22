@@ -13,18 +13,19 @@ app = FastAPI(
     version="0.5"
 )
 
+
+
 # =========================
 # CORS CONFIGURATION
 # =========================
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origin_regex=r"https://.*\.vercel\.app",
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 # Routes
 app.include_router(predict_router)
 app.include_router(system_router)
@@ -49,3 +50,7 @@ def health_check():
         "status": "healthy",
         "server": "running"
     }
+
+@app.get("/cors-test")
+def cors_test():
+    return {"message": "cors working"}

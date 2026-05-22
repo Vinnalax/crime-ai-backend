@@ -301,6 +301,8 @@ function OverviewPage() {
 
   }, [])
 
+  console.log("MAP HOTSPOTS:", hotspots)
+
   return (
     <div className="relative">
 
@@ -585,6 +587,7 @@ function OverviewPage() {
                 ) => (
 
                   <CircleMarker
+                    pane="markerPane"
                     key={index}
                     center={[
                       hotspot.lat,
@@ -613,6 +616,7 @@ function OverviewPage() {
                 ) => (
 
                   <CircleMarker
+                    pane="markerPane"
                     key={`core-${index}`}
                     center={[
                       hotspot.lat,
