@@ -1,18 +1,29 @@
 from fastapi import APIRouter
-from app.gis.hotspot_engine import generate_hotspots
+from fastapi.responses import JSONResponse
+
+from app.gis.hotspot_engine import (
+    generate_hotspots
+)
 
 router = APIRouter()
 
-# =========================================
-# HOTSPOT ENDPOINT
-# =========================================
-
 @router.get("/hotspots")
-def get_hotspots():
 
-    hotspots = generate_hotspots()
+def hotspots():
 
-    return {
-        "total_hotspots": len(hotspots),
-        "hotspots": hotspots
-    }
+    try:
+
+        data = generate_hotspots()
+
+        return JSONResponse(
+            content=data
+        )
+
+    except Exception as e:
+
+        return JSONResponse(
+            status_code=500,
+            content={
+                "error": str(e)
+            }
+        )

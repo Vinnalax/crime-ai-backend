@@ -16,11 +16,23 @@ DATA_PATH = (
     / "bengaluru.parquet"
 )
 
-df = pd.read_parquet(DATA_PATH)
+# =========================================
+# SAFE DATA LOADING
+# =========================================
 
-geo_df = df[
-    df["has_coordinates"] == True
-].copy()
+try:
+
+    df = pd.read_parquet(DATA_PATH)
+
+    geo_df = df[
+        df["has_coordinates"] == True
+    ].copy()
+
+except Exception as e:
+
+    print(f"HOTSPOT DATA LOAD ERROR: {e}")
+
+    geo_df = pd.DataFrame()
 
 # =========================================
 # HOTSPOT CLUSTERING
@@ -28,68 +40,160 @@ geo_df = df[
 
 def generate_hotspots():
 
-    # -------------------------------------
-    # LIMIT DATA FOR MVP PERFORMANCE
-    # -------------------------------------
+    try:
 
-    sample_df = geo_df.head(15000).copy()
+        # ---------------------------------
+        # EMPTY DATA PROTECTION
+        # ---------------------------------
 
-    # -------------------------------------
-    # EXTRACT COORDINATES
-    # -------------------------------------
+        if geo_df.empty:
 
-    coords = sample_df[
-        ["Latitude", "Longitude"]
-    ].values
+            return []
 
-    # -------------------------------------
-    # DBSCAN CLUSTERING
-    # -------------------------------------
+        # ---------------------------------
+        # LIMIT DATA FOR RAILWAY
+        # ---------------------------------
 
-    clustering = DBSCAN(
-        eps=0.01,
-        min_samples=25
-    ).fit(coords)
+        MAX_POINTS = 5000
 
-    sample_df["cluster"] = clustering.labels_
+        sample_df = geo_df.head(
+            MAX_POINTS
+        ).copy()
 
-    # -------------------------------------
-    # REMOVE NOISE
-    # -------------------------------------
+        # ---------------------------------
+        # DROP INVALID COORDINATES
+        # ---------------------------------
 
-    clustered_df = sample_df[
-        sample_df["cluster"] != -1
-    ]
-
-    # -------------------------------------
-    # GENERATE HOTSPOTS
-    # -------------------------------------
-
-    hotspots = []
-
-    for cluster_id in clustered_df["cluster"].unique():
-
-        cluster_points = clustered_df[
-            clustered_df["cluster"] == cluster_id
-        ]
-
-        center_lat = cluster_points["Latitude"].mean()
-
-        center_lng = cluster_points["Longitude"].mean()
-
-        crime_count = len(cluster_points)
-
-        risk_score = min(
-            crime_count / 500,
-            1.0
+        sample_df = sample_df.dropna(
+            subset=["Latitude", "Longitude"]
         )
 
-        hotspots.append({
-            "cluster_id": int(cluster_id),
-            "center_lat": round(center_lat, 6),
-            "center_lng": round(center_lng, 6),
-            "crime_count": int(crime_count),
-            "risk_score": round(risk_score, 2)
-        })
+        # ---------------------------------
+        # ENSURE NUMERIC
+        # ---------------------------------
 
-    return hotspots
+        sample_df["Latitude"] = pd.to_numeric(
+            sample_df["Latitude"],
+            errors="coerce"
+        )
+
+        sample_df["Longitude"] = pd.to_numeric(
+            sample_df["Longitude"],
+            errors="coerce"
+        )
+
+        sample_df = sample_df.dropna(
+            subset=["Latitude", "Longitude"]
+        )
+
+        # ---------------------------------
+        # NO DATA CHECK
+        # ---------------------------------
+
+        if len(sample_df) == 0:
+
+            return []
+
+        # ---------------------------------
+        # EXTRACT COORDINATES
+        # ---------------------------------
+
+        coords = sample_df[
+            ["Latitude", "Longitude"]
+        ].values
+
+        # ---------------------------------
+        # DBSCAN CLUSTERING
+        # ---------------------------------
+
+        clustering = DBSCAN(
+            eps=0.01,
+            min_samples=20,
+            algorithm="ball_tree"
+        ).fit(coords)
+
+        sample_df["cluster"] = (
+            clustering.labels_
+        )
+
+        # ---------------------------------
+        # REMOVE NOISE
+        # ---------------------------------
+
+        clustered_df = sample_df[
+            sample_df["cluster"] != -1
+        ]
+
+        # ---------------------------------
+        # NO CLUSTERS FOUND
+        # ---------------------------------
+
+        if clustered_df.empty:
+
+            return []
+
+        # ---------------------------------
+        # GENERATE HOTSPOTS
+        # ---------------------------------
+
+        hotspots = []
+
+        for cluster_id in clustered_df[
+            "cluster"
+        ].unique():
+
+            cluster_points = clustered_df[
+                clustered_df["cluster"]
+                == cluster_id
+            ]
+
+            center_lat = (
+                cluster_points["Latitude"]
+                .mean()
+            )
+
+            center_lng = (
+                cluster_points["Longitude"]
+                .mean()
+            )
+
+            crime_count = int(
+                len(cluster_points)
+            )
+
+            risk_score = min(
+                crime_count / 500,
+                1.0
+            )
+
+            hotspots.append({
+
+                "cluster_id": int(cluster_id),
+
+                "center_lat": float(
+                    round(center_lat, 6)
+                ),
+
+                "center_lng": float(
+                    round(center_lng, 6)
+                ),
+
+                "crime_count": int(
+                    crime_count
+                ),
+
+                "risk_score": float(
+                    round(risk_score, 2)
+                )
+
+            })
+
+        return hotspots
+
+    except Exception as e:
+
+        print(
+            f"HOTSPOT GENERATION ERROR: {e}"
+        )
+
+        return []
