@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes.prediction import router as predict_router
+from app.routes.predict import router as predict_router
 from app.routes.system import router as system_router
 from app.routes.heatmap import router as heatmap_router
 from app.routes.hotspots import router as hotspot_router
