@@ -14,15 +14,32 @@ DATA_PATH = (
     / "bengaluru.parquet"
 )
 
-df = pd.read_parquet(DATA_PATH)
-
 # =========================================
-# KEEP ONLY VALID COORDINATES
+# LAZY LOAD DATASET
 # =========================================
 
-geo_df = df[
-    df["has_coordinates"] == True
-].copy()
+df = None
+geo_df = None
+
+
+def load_dataset():
+    global df
+    global geo_df
+
+    if df is None:
+
+        df = pd.read_parquet(DATA_PATH)
+
+        # =========================================
+        # KEEP ONLY VALID COORDINATES
+        # =========================================
+
+        geo_df = df[
+            df["has_coordinates"] == True
+        ].copy()
+
+    return geo_df
+
 
 # =========================================
 # GENERATE HEATMAP POINTS
@@ -33,7 +50,9 @@ def generate_heatmap_points(
     year=None
 ):
 
-    filtered_df = geo_df.copy()
+    data = load_dataset()
+
+    filtered_df = data.copy()
 
     # -------------------------------------
     # FILTER BY CRIME TYPE
@@ -55,12 +74,6 @@ def generate_heatmap_points(
         filtered_df = filtered_df[
             filtered_df["FIR_YEAR"] == year
         ]
-
-    # -------------------------------------
-    # CREATE HEATMAP RESPONSE
-    # -------------------------------------
-
-    heatmap_points = []
 
     # -------------------------------------
     # LIMIT RESPONSE SIZE
