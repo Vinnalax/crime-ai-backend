@@ -50,3 +50,7 @@ def health_check():
         "status": "healthy",
         "server": "running"
     }
+
+@app.get("/cors-test")
+def cors_test():
+    return {"message": "cors working"}
