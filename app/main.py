@@ -17,9 +17,14 @@ app = FastAPI(
 # CORS CONFIGURATION
 # =========================
 
+origins = [
+    "https://crime-ai-backend-7schxzf55-vinnalax-s-projects.vercel.app",
+    "http://localhost:5173",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
