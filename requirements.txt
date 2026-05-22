@@ -23,7 +23,6 @@ loguru==0.7.3
 matplotlib==3.10.9
 narwhals==2.21.0
 numpy==2.4.5
-nvidia-nccl-cu12==2.30.4
 packaging==26.2
 pandas==3.0.3
 pillow==12.2.0
