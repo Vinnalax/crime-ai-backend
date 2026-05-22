@@ -18,8 +18,7 @@ app = FastAPI(
 # =========================
 
 origins = [
-    "https://crime-ai-backend-7schxzf55-vinnalax-s-projects.vercel.app",
-    "http://localhost:5173",
+    "https://crime-ai-backend-vbgfw0qm-vinnalax-s-projects.vercel.app",
 ]
 
 # =========================
@@ -28,12 +27,11 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"https://.*\.vercel\.app",
-    allow_credentials=True,
+    allow_origins=origins,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 # Routes
 app.include_router(predict_router)
 app.include_router(system_router)
