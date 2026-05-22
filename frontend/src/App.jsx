@@ -1,7 +1,3 @@
-console.log(
-  import.meta.env.VITE_API_BASE_URL
-)
-
 import { useEffect, useState } from "react"
 
 import {

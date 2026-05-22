@@ -18,28 +18,15 @@ import "leaflet/dist/leaflet.css"
 
 import KpiCard from "../components/KpiCard"
 
-const hotspotZones = [
-  {
-    zone: "K.R. Puram",
-    risk: 96,
-  },
-  {
-    zone: "Byatarayanapura",
-    risk: 92,
-  },
-  {
-    zone: "Subramanyapura",
-    risk: 88,
-  },
-  {
-    zone: "Peenya",
-    risk: 84,
-  },
-  {
-    zone: "Varthur",
-    risk: 79,
-  },
-]
+import {
+  useEffect,
+  useState,
+} from "react"
+
+import {
+  getHotspotAnalytics,
+} from "../api/crimeApi"
+
 
 const liveFeed = [
   "Neural hotspot clustering synchronized",
@@ -48,35 +35,271 @@ const liveFeed = [
   "Live predictive inference engine active",
 ]
 
-const hotspots = [
-  {
-    lat: 12.9716,
-    lng: 77.5946,
-    intensity: 1,
-  },
-  {
-    lat: 12.9352,
-    lng: 77.6245,
-    intensity: 0.8,
-  },
-  {
-    lat: 13.0098,
-    lng: 77.5511,
-    intensity: 0.7,
-  },
-  {
-    lat: 12.926,
-    lng: 77.6762,
-    intensity: 0.9,
-  },
-  {
-    lat: 13.0358,
-    lng: 77.597,
-    intensity: 0.6,
-  },
-]
-
 function OverviewPage() {
+
+  /*
+  ==========================================
+  HOTSPOT STATES
+  ==========================================
+  */
+
+  const [hotspots, setHotspots] =
+    useState([])
+
+  const [hotspotZones, setHotspotZones] =
+    useState([])
+
+  /*
+  ==========================================
+  AREA MAPPING
+  ==========================================
+  */
+
+  const knownAreas = [
+    {
+      name: "Whitefield",
+      lat: 12.9698,
+      lng: 77.7499,
+    },
+
+    {
+      name: "KR Puram",
+      lat: 13.0196,
+      lng: 77.6953,
+    },
+
+    {
+      name: "Hebbal",
+      lat: 13.0358,
+      lng: 77.5970,
+    },
+
+    {
+      name: "Electronic City",
+      lat: 12.8399,
+      lng: 77.6770,
+    },
+
+    {
+      name: "Yelahanka",
+      lat: 13.1007,
+      lng: 77.5963,
+    },
+
+    {
+      name: "Peenya",
+      lat: 13.0321,
+      lng: 77.5273,
+    },
+
+    {
+      name: "Indiranagar",
+      lat: 12.9784,
+      lng: 77.6408,
+    },
+
+    {
+      name: "Koramangala",
+      lat: 12.9352,
+      lng: 77.6245,
+    },
+
+    {
+      name: "Marathahalli",
+      lat: 12.9591,
+      lng: 77.6974,
+    },
+
+    {
+      name: "HSR Layout",
+      lat: 12.9116,
+      lng: 77.6474,
+    },
+
+    {
+      name: "BTM Layout",
+      lat: 12.9166,
+      lng: 77.6101,
+    },
+  ]
+
+  /*
+  ==========================================
+  GET NEAREST AREA
+  ==========================================
+  */
+
+  function getNearestArea(
+    lat,
+    lng
+  ) {
+
+    let nearest =
+      knownAreas[0]
+
+    let minDistance =
+      Infinity
+
+    knownAreas.forEach(
+      (area) => {
+
+        const distance =
+          Math.sqrt(
+            Math.pow(
+              lat - area.lat,
+              2
+            ) +
+            Math.pow(
+              lng - area.lng,
+              2
+            )
+          )
+
+        if (
+          distance <
+          minDistance
+        ) {
+          minDistance =
+            distance
+
+          nearest = area
+        }
+      }
+    )
+
+    return nearest.name
+  }
+
+  /*
+  ==========================================
+  LOAD HOTSPOTS
+  ==========================================
+  */
+
+  useEffect(() => {
+
+    const loadHotspots =
+      async () => {
+
+        try {
+
+          const response =
+            await getHotspotAnalytics()
+
+          const formatted =
+            (
+              response.hotspots ||
+              []
+            ).map((spot) => ({
+
+              ...spot,
+
+              location:
+                getNearestArea(
+                  spot.center_lat,
+                  spot.center_lng
+                ),
+
+              lat:
+                spot.center_lat,
+
+              lng:
+                spot.center_lng,
+
+              intensity:
+                Math.min(
+                  1,
+                  spot.crime_count /
+                    30
+                ),
+            }))
+
+          setHotspots(
+            formatted
+          )
+
+          const mergedZones = {}
+
+          const maxCrimeCount =
+            Math.max(
+              ...formatted.map(
+                (spot) =>
+                  spot.crime_count
+              )
+            )
+
+          formatted.forEach((spot) => {
+
+            const normalizedRisk =
+              Math.round(
+
+                55 +
+
+                (
+                  (
+                    Math.log(
+                      spot.crime_count + 1
+                    ) /
+
+                    Math.log(
+                      maxCrimeCount + 1
+                    )
+                  ) * 35
+                )
+              )
+
+            if (
+              !mergedZones[
+                spot.location
+              ]
+            ) {
+
+              mergedZones[
+                spot.location
+              ] = {
+                zone:
+                  spot.location,
+
+                risk:
+                  normalizedRisk,
+              }
+            }
+
+            mergedZones[
+              spot.location
+            ].risk = Math.max(
+              mergedZones[
+                spot.location
+              ].risk,
+
+              normalizedRisk
+            )
+          })
+
+          setHotspotZones(
+
+            Object.values(
+              mergedZones
+            )
+              .sort(
+                (a, b) =>
+                  b.risk - a.risk
+              )
+              .slice(0, 5)
+          )
+
+        } catch (error) {
+
+          console.error(
+            "HOTSPOT ANALYTICS ERROR:",
+            error
+          )
+        }
+      }
+
+    loadHotspots()
+
+  }, [])
 
   return (
     <div className="relative">

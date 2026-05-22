@@ -23,28 +23,14 @@ import {
   Cell,
 } from "recharts"
 
-const yearlyCrimeData = [
-  { year: "2019", crimes: 28000 },
-  { year: "2020", crimes: 24000 },
-  { year: "2021", crimes: 31000 },
-  { year: "2022", crimes: 39000 },
-  { year: "2023", crimes: 47000 },
-]
+import {
+  useEffect,
+  useState,
+} from "react"
 
-const crimeTypeData = [
-  { name: "Theft", value: 34 },
-  { name: "Cyber Crime", value: 18 },
-  { name: "Robbery", value: 12 },
-  { name: "Accidents", value: 20 },
-  { name: "Others", value: 16 },
-]
-
-const hotspotData = [
-  { area: "K.R Puram", risk: 95 },
-  { area: "Peenya", risk: 88 },
-  { area: "Varthur", risk: 82 },
-  { area: "Byatarayanapura", risk: 78 },
-]
+import {
+  getHotspotAnalytics,
+} from "../api/crimeApi"
 
 const COLORS = [
   "#ef4444",
@@ -55,6 +41,290 @@ const COLORS = [
 ]
 
 function AnalyticsPage() {
+
+  const [yearlyCrimeData, setYearlyCrimeData] =
+  useState([])
+
+  const [crimeTypeData, setCrimeTypeData] =
+    useState([])
+
+  const [hotspotData, setHotspotData] =
+    useState([])
+
+  const knownAreas = [
+    {
+      name: "Whitefield",
+      lat: 12.9698,
+      lng: 77.7499,
+    },
+
+    {
+      name: "KR Puram",
+      lat: 13.0196,
+      lng: 77.6953,
+    },
+
+    {
+      name: "Hebbal",
+      lat: 13.0358,
+      lng: 77.5970,
+    },
+
+    {
+      name: "Electronic City",
+      lat: 12.8399,
+      lng: 77.6770,
+    },
+
+    {
+      name: "Yelahanka",
+      lat: 13.1007,
+      lng: 77.5963,
+    },
+
+    {
+      name: "Peenya",
+      lat: 13.0321,
+      lng: 77.5273,
+    },
+
+    {
+      name: "Indiranagar",
+      lat: 12.9784,
+      lng: 77.6408,
+    },
+
+    {
+      name: "Koramangala",
+      lat: 12.9352,
+      lng: 77.6245,
+    },
+
+    {
+      name: "Marathahalli",
+      lat: 12.9591,
+      lng: 77.6974,
+    },
+
+    {
+      name: "HSR Layout",
+      lat: 12.9116,
+      lng: 77.6474,
+    },
+
+    {
+      name: "BTM Layout",
+      lat: 12.9166,
+      lng: 77.6101,
+    },
+  ]
+
+  function getNearestArea(
+    lat,
+    lng
+  ) {
+
+    let nearest =
+      knownAreas[0]
+
+    let minDistance =
+      Infinity
+
+    knownAreas.forEach(
+      (area) => {
+
+        const distance =
+          Math.sqrt(
+            Math.pow(
+              lat - area.lat,
+              2
+            ) +
+            Math.pow(
+              lng - area.lng,
+              2
+            )
+          )
+
+        if (
+          distance <
+          minDistance
+        ) {
+
+          minDistance =
+            distance
+
+          nearest = area
+        }
+      }
+    )
+
+    return nearest.name
+  }
+
+  useEffect(() => {
+
+    const loadAnalytics =
+      async () => {
+
+        try {
+
+          const response =
+            await getHotspotAnalytics()
+
+          const hotspots =
+            response.hotspots || []
+
+          /*
+          =========================================
+          HOTSPOT BAR CHART
+          =========================================
+          */
+
+          const maxCrimeCount =
+            Math.max(
+              ...hotspots.map(
+                (spot) =>
+                  spot.crime_count
+              )
+            )
+
+          const hotspotFormatted =
+            hotspots
+              .map((spot) => ({
+
+                area:
+                  getNearestArea(
+                    spot.center_lat,
+                    spot.center_lng
+                  ),
+
+                risk:
+                  Math.round(
+
+                    55 +
+
+                    (
+                      (
+                        Math.log(
+                          spot.crime_count + 1
+                        ) /
+
+                        Math.log(
+                          maxCrimeCount + 1
+                        )
+                      ) * 35
+                    )
+                  ),
+              }))
+              .sort(
+                (a, b) =>
+                  b.risk - a.risk
+              )
+              .slice(0, 5)
+
+          setHotspotData(
+            hotspotFormatted
+          )
+
+          /*
+          =========================================
+          YEARLY TREND MOCK FROM DATA
+          =========================================
+          */
+
+          const totalCrimes =
+            hotspots.reduce(
+              (sum, spot) =>
+                sum +
+                spot.crime_count,
+              0
+            )
+
+          setYearlyCrimeData([
+            {
+              year: "2019",
+              crimes:
+                Math.round(
+                  totalCrimes * 0.52
+                ),
+            },
+
+            {
+              year: "2020",
+              crimes:
+                Math.round(
+                  totalCrimes * 0.61
+                ),
+            },
+
+            {
+              year: "2021",
+              crimes:
+                Math.round(
+                  totalCrimes * 0.74
+                ),
+            },
+
+            {
+              year: "2022",
+              crimes:
+                Math.round(
+                  totalCrimes * 0.88
+                ),
+            },
+
+            {
+              year: "2023",
+              crimes:
+                totalCrimes,
+            },
+          ])
+
+          /*
+          =========================================
+          CRIME DISTRIBUTION
+          =========================================
+          */
+
+          setCrimeTypeData([
+            {
+              name: "Theft",
+              value: 34,
+            },
+
+            {
+              name: "Cyber Crime",
+              value: 18,
+            },
+
+            {
+              name: "Robbery",
+              value: 12,
+            },
+
+            {
+              name: "Accidents",
+              value: 20,
+            },
+
+            {
+              name: "Others",
+              value: 16,
+            },
+          ])
+
+        } catch (error) {
+
+          console.error(
+            "ANALYTICS ERROR:",
+            error
+          )
+        }
+      }
+
+    loadAnalytics()
+
+  }, [])
 
   return (
     <div className="relative">
@@ -213,7 +483,7 @@ function AnalyticsPage() {
 
             <h2 className="text-4xl font-bold mt-4 text-slate-900 dark:text-white">
 
-              K.R Puram
+              Koramangala
 
             </h2>
 

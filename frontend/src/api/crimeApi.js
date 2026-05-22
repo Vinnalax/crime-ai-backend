@@ -5,6 +5,9 @@ import api from "./client"
 PREDICTION
 ====================================
 */
+const API_BASE_URL =
+  import.meta.env
+    .VITE_API_BASE_URL
 
 export const predictCrime = async (
   payload
@@ -77,12 +80,20 @@ export const getYearlyAnalytics =
 export const getHotspotAnalytics =
   async () => {
 
-    const response = await api.get(
-      "/analytics/hotspots"
-    )
+    const response =
+      await fetch(
+        `${API_BASE_URL}hotspots`
+      )
 
-    return response.data
-}
+    if (!response.ok) {
+
+      throw new Error(
+        "Failed to fetch hotspots"
+      )
+    }
+
+    return response.json()
+  }
 
 /*
 ====================================
@@ -101,3 +112,4 @@ export const reportCrime = async (
 
   return response.data
 }
+

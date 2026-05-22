@@ -288,7 +288,9 @@ function PredictionPage() {
             ).toFixed(1),
 
           risk:
-            data.risk_level,
+            data.risk_level ||
+            data.risk ||
+            "Moderate",
 
           latitude,
           longitude,

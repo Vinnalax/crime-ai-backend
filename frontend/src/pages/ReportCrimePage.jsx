@@ -18,6 +18,10 @@ import {
   FileWarning,
 } from "lucide-react"
 
+import {
+  reportCrime,
+} from "../api/crimeApi"
+
 const areaAliases = {
   "kr puram": "K.R. Puram Bengaluru",
   "whitefield": "Whitefield Bengaluru",
@@ -168,15 +172,60 @@ function ReportCrimePage() {
   */
 
   const handleSubmit =
-    () => {
+    async () => {
 
       if (
         !crime ||
         !resolvedLocation
       ) return
 
-      setSubmitted(true)
+      try {
 
+        setLoading(true)
+
+        const payload = {
+
+          crime_type:
+            crime,
+
+          latitude:
+            resolvedLocation.latitude,
+
+          longitude:
+            resolvedLocation.longitude,
+        }
+
+        if (hour !== "") {
+
+          payload.hour =
+            Number(hour)
+        }
+
+        if (month !== "") {
+
+          payload.month =
+            Number(month)
+        }
+
+        const response =
+          await reportCrime(
+            payload
+          )
+
+        setSubmitted(true)
+
+      } catch (error) {
+
+        console.error(
+          "REPORT ERROR:",
+          error
+        )
+
+      } finally {
+
+        setLoading(false)
+
+      }
     }
 
   return (
@@ -587,6 +636,84 @@ function ReportCrimePage() {
             </div>
 
           </div>
+
+          {submitted && (
+
+            <motion.div
+              initial={{
+                opacity: 0,
+                y: 20,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              className="
+                rounded-[36px]
+                border border-emerald-400/20
+                bg-emerald-500/10
+                backdrop-blur-2xl
+                p-7
+              "
+            >
+
+              <div className="flex items-center gap-4 mb-5">
+
+                <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-400/20 flex items-center justify-center">
+
+                  <CheckCircle2 className="text-emerald-400" />
+
+                </div>
+
+                <div>
+
+                  <h2 className="text-2xl font-semibold text-white">
+
+                    Report Submitted
+
+                  </h2>
+
+                  <p className="text-emerald-300 text-sm mt-1">
+
+                    Intelligence successfully synced to backend
+
+                  </p>
+
+                </div>
+
+              </div>
+
+              <div className="space-y-3 text-sm text-slate-300">
+
+                <p>
+
+                  Crime:
+                  {" "}
+                  <span className="text-white font-medium">
+
+                    {crime}
+
+                  </span>
+
+                </p>
+
+                <p>
+
+                  Location:
+                  {" "}
+                  <span className="text-white font-medium">
+
+                    {resolvedLocation?.display}
+
+                  </span>
+
+                </p>
+
+              </div>
+
+            </motion.div>
+
+          )}
 
         </div>
 

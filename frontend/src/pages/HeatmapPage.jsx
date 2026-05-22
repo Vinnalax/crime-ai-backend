@@ -10,7 +10,241 @@ import {
   Activity,
 } from "lucide-react"
 
+import {
+  useEffect,
+  useState,
+} from "react"
+
+import {
+  getHotspotAnalytics,
+} from "../api/crimeApi"
+
 function HeatmapPage() {
+
+  const [hotspotZones, setHotspotZones] =
+    useState([])
+
+  const knownAreas = [
+    {
+      name: "Whitefield",
+      lat: 12.9698,
+      lng: 77.7499,
+    },
+
+    {
+      name: "KR Puram",
+      lat: 13.0196,
+      lng: 77.6953,
+    },
+
+    {
+      name: "Hebbal",
+      lat: 13.0358,
+      lng: 77.5970,
+    },
+
+    {
+      name: "Electronic City",
+      lat: 12.8399,
+      lng: 77.6770,
+    },
+
+    {
+      name: "Yelahanka",
+      lat: 13.1007,
+      lng: 77.5963,
+    },
+
+    {
+      name: "Peenya",
+      lat: 13.0321,
+      lng: 77.5273,
+    },
+
+    {
+      name: "Indiranagar",
+      lat: 12.9784,
+      lng: 77.6408,
+    },
+
+    {
+      name: "Koramangala",
+      lat: 12.9352,
+      lng: 77.6245,
+    },
+
+    {
+      name: "Marathahalli",
+      lat: 12.9591,
+      lng: 77.6974,
+    },
+
+    {
+      name: "HSR Layout",
+      lat: 12.9116,
+      lng: 77.6474,
+    },
+
+    {
+      name: "BTM Layout",
+      lat: 12.9166,
+      lng: 77.6101,
+    },
+  ]
+
+  function getNearestArea(
+    lat,
+    lng
+  ) {
+
+    let nearest =
+      knownAreas[0]
+
+    let minDistance =
+      Infinity
+
+    knownAreas.forEach(
+      (area) => {
+
+        const distance =
+          Math.sqrt(
+            Math.pow(
+              lat - area.lat,
+              2
+            ) +
+            Math.pow(
+              lng - area.lng,
+              2
+            )
+          )
+
+        if (
+          distance <
+          minDistance
+        ) {
+
+          minDistance =
+            distance
+
+          nearest = area
+        }
+      }
+    )
+
+    return nearest.name
+  }
+
+  useEffect(() => {
+
+    const loadHotspots =
+      async () => {
+
+        try {
+
+          const response =
+            await getHotspotAnalytics()
+
+          const formatted =
+            (
+              response.hotspots ||
+              []
+            ).map((spot) => ({
+
+              ...spot,
+
+              location:
+                getNearestArea(
+                  spot.center_lat,
+                  spot.center_lng
+                ),
+            }))
+
+          const mergedZones = {}
+
+          const maxCrimeCount =
+            Math.max(
+              ...formatted.map(
+                (spot) =>
+                  spot.crime_count
+              )
+            )
+
+          formatted.forEach(
+            (spot) => {
+
+              const normalizedRisk =
+                Math.round(
+
+                  55 +
+
+                  (
+                    (
+                      Math.log(
+                        spot.crime_count + 1
+                      ) /
+
+                      Math.log(
+                        maxCrimeCount + 1
+                      )
+                    ) * 35
+                  )
+                )
+
+              if (
+                !mergedZones[
+                  spot.location
+                ]
+              ) {
+
+                mergedZones[
+                  spot.location
+                ] = {
+
+                  zone:
+                    spot.location,
+
+                  risk:
+                    normalizedRisk,
+                }
+              }
+
+              mergedZones[
+                spot.location
+              ].risk = Math.max(
+
+                mergedZones[
+                  spot.location
+                ].risk,
+
+                normalizedRisk
+              )
+            }
+          )
+
+          setHotspotZones(
+
+            Object.values(
+              mergedZones
+            )
+              .sort(
+                (a, b) =>
+                  b.risk - a.risk
+              )
+              .slice(0, 5)
+          )
+
+        } catch (error) {
+
+          console.error(
+            "HOTSPOT ERROR:",
+            error
+          )
+        }
+      }
+
+    loadHotspots()
+
+  }, [])
 
   return (
     <div className="relative">
@@ -275,64 +509,60 @@ function HeatmapPage() {
 
               <div className="space-y-5">
 
-                {[
-                  "K.R. Puram",
-                  "Byatarayanapura",
-                  "Peenya",
-                  "Varthur",
-                  "Subramanyapura",
-                ].map((zone) => (
+                {hotspotZones.map(
+                  (zone) => (
 
-                  <motion.div
-                    whileHover={{
-                      x: 4,
-                    }}
-                    key={zone}
-                    className="bg-white/50 dark:bg-background/60 border border-white/[0.05] rounded-2xl p-4 backdrop-blur-xl"
-                  >
+                    <motion.div
+                      whileHover={{
+                        x: 4,
+                      }}
+                      key={zone.zone}
+                      className="bg-white/50 dark:bg-background/60 border border-white/[0.05] rounded-2xl p-4 backdrop-blur-xl"
+                    >
 
-                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center justify-between mb-4">
 
-                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3">
 
-                        <div className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
+                          <div className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
 
-                        <span className="font-medium text-slate-900 dark:text-white">
+                          <span className="font-medium text-slate-900 dark:text-white">
 
-                          {zone}
+                            {zone.zone}
+
+                          </span>
+
+                        </div>
+
+                        <span className="text-red-400 text-sm">
+
+                          {zone.risk}%
 
                         </span>
 
                       </div>
 
-                      <span className="text-red-400 text-sm">
+                      <div className="h-2 rounded-full bg-black/[0.04] dark:bg-white/[0.04] overflow-hidden">
 
-                        High Risk
+                        <motion.div
+                          initial={{
+                            width: 0,
+                          }}
+                          animate={{
+                            width: `${zone.risk}%`,
+                          }}
+                          transition={{
+                            duration: 1,
+                          }}
+                          className="h-full bg-gradient-to-r from-red-500 to-orange-400 rounded-full"
+                        />
 
-                      </span>
+                      </div>
 
-                    </div>
+                    </motion.div>
 
-                    <div className="h-2 rounded-full bg-black/[0.04] dark:bg-white/[0.04] overflow-hidden">
-
-                      <motion.div
-                        initial={{
-                          width: 0,
-                        }}
-                        animate={{
-                          width: "82%",
-                        }}
-                        transition={{
-                          duration: 1,
-                        }}
-                        className="h-full bg-gradient-to-r from-red-500 to-orange-400 rounded-full"
-                      />
-
-                    </div>
-
-                  </motion.div>
-
-                ))}
+                  )
+                )}
 
               </div>
 
