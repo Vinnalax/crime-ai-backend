@@ -59,6 +59,13 @@ def load_model():
 def predict_crime(latitude, longitude, hour=None, month=None):
 
     load_model()
+
+    @app.on_event("startup")
+def startup_load_model():
+
+    load_model()
+
+    print("MODEL PRELOADED")
     
     try:
 

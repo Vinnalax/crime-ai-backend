@@ -6,6 +6,7 @@ from app.routes.heatmap import router as heatmap_router
 from app.routes.hotspots import router as hotspot_router
 from app.routes.analytics import router as analytics_router
 from app.routes.report_crime import router as report_router
+from app.your_model_file import load_model
 
 app = FastAPI(
     title="Crime Prediction API",
@@ -27,6 +28,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.on_event("startup")
+def startup_event():
+
+    load_model()
+
+    print("MODEL PRELOADED")
+    
 # Routes
 app.include_router(predict_router)
 app.include_router(system_router)
