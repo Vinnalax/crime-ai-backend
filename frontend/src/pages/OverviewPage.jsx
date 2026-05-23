@@ -302,7 +302,6 @@ function OverviewPage() {
 
   }, [])
 
-  console.log("MAP HOTSPOTS:", hotspots)
 
   return (
     <div className="relative">

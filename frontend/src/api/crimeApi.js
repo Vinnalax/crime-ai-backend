@@ -5,9 +5,6 @@ import api from "./client"
 PREDICTION
 ====================================
 */
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  "http://localhost:8000"
 
 export const normalizeHotspot = (spot) => ({
   clusterId: spot.cluster_id,
@@ -97,18 +94,16 @@ export const getHotspotAnalytics =
   async () => {
 
     const response =
-      await fetch(
-        `${API_BASE_URL}/hotspots`
-      )
+      await api.get("/hotspots")
 
-    if (!response.ok) {
+    return {
+      ...response.data,
 
-      throw new Error(
-        "Failed to fetch hotspots"
-      )
+      hotspots:
+        (response.data.hotspots || []).map(
+          normalizeHotspot
+        ),
     }
-
-    return response.json()
   }
 
 /*
