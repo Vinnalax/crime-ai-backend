@@ -25,19 +25,41 @@ ENCODER_PATH = BASE_DIR / "models" / "label_encoder.pkl"
 # LOAD MODEL + LABEL ENCODER
 # =========================
 
-model = joblib.load(MODEL_PATH)
+model = None
+label_encoder = None
 
-label_encoder = joblib.load(ENCODER_PATH)
+def load_model():
 
-print("MODEL LOADED SUCCESSFULLY")
-print("LABEL ENCODER LOADED SUCCESSFULLY")
+    global model
+    global label_encoder
 
+    if model is None:
+
+        print("LOADING MODEL...")
+
+        model = joblib.load(MODEL_PATH)
+
+        print("MODEL LOADED SUCCESSFULLY")
+
+    if label_encoder is None:
+
+        print("LOADING LABEL ENCODER...")
+
+        label_encoder = joblib.load(
+            ENCODER_PATH
+        )
+
+        print(
+            "LABEL ENCODER LOADED SUCCESSFULLY"
+        )
 # =========================
 # PREDICTION FUNCTION
 # =========================
 
 def predict_crime(latitude, longitude, hour=None, month=None):
 
+    load_model()
+    
     try:
 
         # Current datetime
